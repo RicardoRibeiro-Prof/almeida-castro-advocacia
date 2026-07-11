@@ -1,0 +1,115 @@
+.brand {
+  gap: 14px;
+}
+
+.brand__mark {
+  position: relative;
+  display: flex;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: linear-gradient(155deg, #0e2846 0%, #081a2e 100%);
+  box-shadow: 0 10px 22px rgba(8, 26, 46, 0.16);
+}
+
+.brand__mark::before {
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(199, 164, 95, 0.45);
+  border-radius: 50%;
+  content: "";
+}
+
+.brand__letter,
+.brand__amp {
+  position: relative;
+  z-index: 1;
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.brand__letter {
+  color: var(--white);
+  font-size: 1.15rem;
+}
+
+.brand__letter--top {
+  transform: translateY(2px);
+}
+
+.brand__letter--bottom {
+  transform: translateY(-2px);
+}
+
+.brand__amp {
+  margin: -2px 0;
+  color: var(--gold-500);
+  font-size: 0.88rem;
+}
+
+.brand__text {
+  line-height: 1.02;
+}
+
+.brand__text strong {
+  font-size: 1.52rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.brand__text small {
+  margin-top: 6px;
+  font-size: 0.73rem;
+  letter-spacing: 0.28em;
+}
+
+.brand--footer .brand__mark {
+  background: linear-gradient(155deg, #d4b06b 0%, #b98d46 100%);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.brand--footer .brand__letter {
+  color: var(--navy-950);
+}
+
+.brand--footer .brand__amp {
+  color: var(--white);
+}
+
+.brand--footer .brand__text small {
+  color: var(--gold-300);
+}
+
+@media (max-width: 680px) {
+  .brand {
+    gap: 10px;
+  }
+
+  .brand__mark {
+    width: 46px;
+    height: 46px;
+  }
+
+  .brand__letter {
+    font-size: 0.98rem;
+  }
+
+  .brand__amp {
+    font-size: 0.75rem;
+  }
+
+  .brand__text strong {
+    font-size: 1.08rem;
+  }
+
+  .brand__text small {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+  }
+}
