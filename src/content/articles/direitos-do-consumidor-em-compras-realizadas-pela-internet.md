@@ -3,7 +3,7 @@ title: "Direitos do consumidor em compras realizadas pela internet"
 slug: "direitos-do-consumidor-em-compras-realizadas-pela-internet"
 category: "Direito do Consumidor"
 summary: "Conheça cuidados importantes sobre informação, prazo de entrega, arrependimento e solução de problemas em compras online."
-cover: "/images/articles/compras-online.jpg"
+cover: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=86"
 author: "Dr. Rafael Almeida"
 date: "2026-06-18T12:00:00.000Z"
 readingTime: 4
