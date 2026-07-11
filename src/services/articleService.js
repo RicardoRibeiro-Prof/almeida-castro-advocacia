@@ -10,6 +10,13 @@ const articleFiles = import.meta.glob('../content/articles/*.md', {
 
 marked.setOptions({ gfm: true, breaks: false })
 
+function resolvePublicAsset(value) {
+  const fallback = 'images/articles/default.jpg'
+  const asset = value || fallback
+  if (/^(https?:|data:|blob:)/i.test(asset)) return asset
+  return `${import.meta.env.BASE_URL}${asset.replace(/^\/+/, '')}`
+}
+
 function splitFrontmatter(raw = '') {
   const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/)
   if (!match) return { attributes: {}, body: raw }
@@ -42,7 +49,7 @@ function normalizeArticle(filePath, raw) {
     summary: attributes.summary || '',
     content: marked.parse(body),
     content_markdown: body,
-    cover_image_url: attributes.cover || '/images/articles/default.jpg',
+    cover_image_url: resolvePublicAsset(attributes.cover),
     category_id: categorySlug,
     author_name: attributes.author || 'Almeida & Castro Advocacia',
     reading_time: Number(attributes.readingTime || attributes.reading_time) || estimateReadingTime(body),
