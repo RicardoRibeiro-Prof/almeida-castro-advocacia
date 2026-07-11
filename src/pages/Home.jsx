@@ -1,8 +1,12 @@
 import {
   ArrowRight,
   CheckCircle2,
+  LockKeyhole,
+  MapPin,
   MessageCircle,
+  MonitorSmartphone,
   Quote,
+  Scale,
   ShieldCheck,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -19,12 +23,21 @@ import { teamMembers } from '../data/team'
 import { getRecentPublishedArticles } from '../services/articleService'
 import { getWhatsAppUrl } from '../utils/constants'
 
+const HERO_IMAGE = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=88'
+const ABOUT_IMAGE = 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1500&q=88'
+
 const differences = [
   'Atendimento personalizado e respeitoso',
   'Comunicação clara sobre procedimentos e documentos',
   'Análise responsável das circunstâncias apresentadas',
   'Atuação ética e alinhada às normas profissionais',
   'Acompanhamento próximo durante o atendimento',
+]
+
+const highlights = [
+  { icon: MapPin, title: 'Atendimento local', text: 'São Raimundo Nonato e região' },
+  { icon: MonitorSmartphone, title: 'Canais digitais', text: 'Contato organizado e acessível' },
+  { icon: LockKeyhole, title: 'Sigilo profissional', text: 'Discrição em todas as etapas' },
 ]
 
 export default function Home() {
@@ -46,14 +59,14 @@ export default function Home() {
         description="Almeida & Castro Advocacia: atendimento jurídico institucional, ético e próximo em São Raimundo Nonato, Piauí."
       />
 
-      <section className="hero">
+      <section className="hero hero--premium">
         <div className="hero__pattern" aria-hidden="true" />
         <div className="container hero__grid">
           <div className="hero__content">
-            <span className="eyebrow eyebrow--light">Almeida & Castro Advocacia</span>
-            <h1>Assessoria jurídica com seriedade, ética e atendimento próximo.</h1>
+            <span className="eyebrow eyebrow--light">Advocacia em São Raimundo Nonato – PI</span>
+            <h1>Atuação jurídica ética, estratégica e próxima de você.</h1>
             <p>
-              Orientação jurídica responsável para pessoas, famílias e empresas em São Raimundo Nonato e região, com comunicação clara e atenção às particularidades de cada demanda.
+              Orientação responsável para pessoas, famílias e empresas, com análise cuidadosa, linguagem clara e atenção às particularidades de cada situação.
             </p>
             <div className="hero__actions">
               <Link className="button button--gold" to="/areas-de-atuacao">
@@ -65,11 +78,12 @@ export default function Home() {
             </div>
             <div className="hero__trust">
               <ShieldCheck size={22} />
-              <span>Atuação institucional orientada por ética, clareza e responsabilidade.</span>
+              <span>Atendimento orientado por ética, discrição, clareza e responsabilidade profissional.</span>
             </div>
           </div>
-          <div className="hero__visual">
-            <img src="/images/hero-office.jpg" alt="Ambiente profissional de escritório de advocacia" />
+
+          <div className="hero__visual hero__visual--photo">
+            <img src={HERO_IMAGE} alt="Escritório moderno e acolhedor" />
             <div className="hero__visual-card">
               <Quote size={22} />
               <p>Informação clara para decisões jurídicas mais conscientes.</p>
@@ -78,20 +92,34 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="institutional-strip" aria-label="Diferenciais de atendimento">
+        <div className="container institutional-strip__grid">
+          {highlights.map(({ icon: Icon, title, text }) => (
+            <article key={title}>
+              <span><Icon size={23} /></span>
+              <div><strong>{title}</strong><small>{text}</small></div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section className="section about-preview">
         <div className="container split-layout">
-          <div className="image-frame image-frame--office">
-            <img src="/images/about-office.jpg" alt="Sala de reunião do escritório Almeida & Castro" loading="lazy" />
-            <span className="image-frame__detail">Atendimento em São Raimundo Nonato – PI</span>
+          <div className="image-frame image-frame--office image-frame--premium">
+            <img src={ABOUT_IMAGE} alt="Sala de reunião contemporânea" loading="lazy" />
+            <span className="image-frame__detail">Atendimento presencial e digital</span>
           </div>
           <div>
             <SectionHeading
               eyebrow="O Escritório"
-              title="Atuação jurídica com organização, escuta e responsabilidade"
-              description="A Almeida & Castro Advocacia é um escritório fictício criado para demonstrar uma presença digital institucional, moderna e adequada à advocacia."
+              title="Seriedade jurídica com atendimento humano e organizado"
+              description="A Almeida & Castro Advocacia atua com escuta cuidadosa, análise técnica e comunicação acessível, respeitando o contexto e as necessidades de cada atendimento."
             />
             <p>
-              Nosso atendimento parte da compreensão dos fatos, da conferência dos documentos e da explicação cuidadosa das alternativas jurídicas. Cada demanda é tratada com discrição, respeito e observância às normas profissionais.
+              O trabalho começa pela compreensão dos fatos e pela conferência dos documentos. A partir dessa análise, as alternativas jurídicas são apresentadas com objetividade, sem promessas de resultado e com atenção aos riscos envolvidos.
+            </p>
+            <p>
+              Nosso propósito é oferecer um atendimento profissional, discreto e próximo, mantendo o cliente informado sobre os procedimentos e as etapas relevantes.
             </p>
             <div className="value-mini-grid">
               {institutionalValues.slice(0, 2).map(({ title, description, icon: Icon }) => (
@@ -103,12 +131,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section section--soft">
+      <section className="section section--soft areas-showcase">
         <div className="container">
           <SectionHeading
             eyebrow="Áreas de atuação"
             title="Orientação jurídica em diferentes momentos"
-            description="Conheça algumas das áreas atendidas pelo escritório. A definição da atuação adequada depende da análise individual dos fatos e documentos."
+            description="Atuação consultiva, preventiva e contenciosa, sempre definida após a análise individual dos fatos, documentos e objetivos envolvidos."
             align="center"
           />
           <div className="area-grid">
@@ -130,21 +158,22 @@ export default function Home() {
               {differences.map((item) => <li key={item}><CheckCircle2 size={20} /> {item}</li>)}
             </ul>
           </div>
-          <div className="principles-card">
+          <div className="principles-card principles-card--premium">
+            <Scale size={34} />
             <span className="principles-card__number">05</span>
             <h3>Princípios do atendimento</h3>
-            <p>Escutar, analisar, explicar, orientar e acompanhar. Uma sequência simples que ajuda a manter o atendimento claro e responsável.</p>
+            <p>Escutar, analisar, explicar, orientar e acompanhar. Uma sequência que mantém o atendimento claro, responsável e transparente.</p>
             <Link className="text-link text-link--light" to="/contato">Solicitar informações <ArrowRight size={17} /></Link>
           </div>
         </div>
       </section>
 
-      <section className="section">
+      <section className="section team-showcase">
         <div className="container">
           <SectionHeading
             eyebrow="Equipe"
-            title="Profissionais apresentados de forma transparente"
-            description="Perfis fictícios utilizados exclusivamente para demonstração deste projeto de portfólio."
+            title="Experiência, escuta e atuação integrada"
+            description="Conheça os profissionais responsáveis pelo atendimento e as principais áreas de atuação do escritório."
             align="center"
           />
           <div className="team-grid team-grid--home">
@@ -154,12 +183,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section section--soft">
+      <section className="section section--soft articles-showcase">
         <div className="container">
           <SectionHeading
             eyebrow="Conteúdo jurídico"
-            title="Artigos recentes"
-            description="Informações gerais para ajudar o público a compreender temas jurídicos. Os conteúdos não substituem uma análise individualizada."
+            title="Informação para compreender seus direitos"
+            description="Artigos produzidos em linguagem acessível sobre temas jurídicos do cotidiano. Os conteúdos são informativos e não substituem uma análise individualizada."
             align="center"
           />
           {loading ? (
@@ -177,9 +206,9 @@ export default function Home() {
 
       <ContactSection />
 
-      <section className="cta-section">
+      <section className="cta-section cta-section--premium">
         <div className="container cta-section__inner">
-          <div><span className="eyebrow eyebrow--light">Contato institucional</span><h2>Precisa de informações sobre atendimento jurídico?</h2><p>Envie uma mensagem e informe, de forma resumida, qual tema deseja esclarecer.</p></div>
+          <div><span className="eyebrow eyebrow--light">Contato institucional</span><h2>Precisa de orientação sobre uma questão jurídica?</h2><p>Envie uma mensagem com uma breve descrição do tema para receber informações sobre o atendimento.</p></div>
           <a className="button button--gold" href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} /> Entrar em contato</a>
         </div>
       </section>
