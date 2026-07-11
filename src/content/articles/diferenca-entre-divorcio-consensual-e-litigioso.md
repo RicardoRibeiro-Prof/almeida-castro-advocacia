@@ -3,7 +3,7 @@ title: "Diferença entre divórcio consensual e litigioso"
 slug: "diferenca-entre-divorcio-consensual-e-litigioso"
 category: "Direito de Família"
 summary: "Veja como o consenso entre as partes influencia o procedimento e quais temas normalmente precisam ser definidos."
-cover: "/images/articles/divorcio.jpg"
+cover: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=86"
 author: "Dra. Marina Castro"
 date: "2026-05-30T12:00:00.000Z"
 readingTime: 3
