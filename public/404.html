@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Redirecionando…</title>
+    <script>
+      ;(function () {
+        const repository = 'almeida-castro-advocacia'
+        const onGitHubDomain = location.hostname.endsWith('.github.io')
+        const base = onGitHubDomain ? `/${repository}/` : '/'
+        sessionStorage.setItem(
+          'almeida-castro-pages-redirect',
+          location.pathname + location.search + location.hash,
+        )
+        location.replace(base)
+      })()
+    </script>
+  </head>
+  <body></body>
+</html>
