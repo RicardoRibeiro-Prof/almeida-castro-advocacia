@@ -3,11 +3,13 @@ import PageHero from '../components/PageHero'
 import SectionHeading from '../components/SectionHeading'
 import Seo from '../components/Seo'
 
+const ABOUT_IMAGE = 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1500&q=88'
+
 const timeline = [
-  { year: '2018', title: 'Início do projeto', text: 'Estruturação de uma proposta de atendimento jurídico próximo e organizado.' },
-  { year: '2020', title: 'Ampliação das áreas', text: 'Integração de atendimentos cíveis, previdenciários, trabalhistas e familiares.' },
-  { year: '2023', title: 'Atendimento digital', text: 'Adoção de canais digitais para comunicação, agendamento e conteúdo informativo.' },
-  { year: 'Hoje', title: 'Presença institucional', text: 'Atuação orientada por clareza, ética e aperfeiçoamento contínuo.' },
+  { year: '2018', title: 'Início da atuação', text: 'Formação de uma proposta de atendimento jurídico próximo, ético e organizado.' },
+  { year: '2020', title: 'Atuação integrada', text: 'Ampliação do atendimento em questões cíveis, previdenciárias, trabalhistas e familiares.' },
+  { year: '2023', title: 'Canais digitais', text: 'Adoção de ferramentas para facilitar a comunicação, o agendamento e o acesso à informação.' },
+  { year: 'Hoje', title: 'Evolução contínua', text: 'Aperfeiçoamento constante da estrutura, do atendimento e da produção de conteúdo jurídico.' },
 ]
 
 export default function About() {
@@ -17,19 +19,19 @@ export default function About() {
       <PageHero
         eyebrow="Institucional"
         title="O Escritório"
-        description="Uma proposta de atuação jurídica organizada, responsável e próxima da realidade de cada pessoa atendida."
+        description="Atuação jurídica organizada, responsável e próxima da realidade de cada pessoa atendida."
         breadcrumbs={[{ label: 'O Escritório' }]}
       />
 
       <section className="section">
         <div className="container split-layout split-layout--reverse-mobile">
           <div>
-            <SectionHeading eyebrow="Nossa história" title="Seriedade jurídica com comunicação acessível" />
-            <p>A Almeida & Castro Advocacia é um escritório fictício sediado em São Raimundo Nonato, Piauí, desenvolvido para demonstrar uma presença digital profissional e adequada às normas de publicidade da advocacia.</p>
-            <p>O projeto representa um escritório que valoriza a escuta cuidadosa, a análise documental e a explicação clara de procedimentos. A atuação é conduzida sem promessas de resultado e com respeito às particularidades de cada situação.</p>
-            <p>Nosso propósito institucional é oferecer um ambiente de atendimento acolhedor, organizado e tecnicamente responsável.</p>
+            <SectionHeading eyebrow="Nossa essência" title="Seriedade jurídica com comunicação acessível" />
+            <p>A Almeida & Castro Advocacia foi estruturada para oferecer atendimento jurídico com organização, escuta e clareza. O escritório está sediado em São Raimundo Nonato, Piauí, e utiliza também canais digitais para facilitar a comunicação com o público.</p>
+            <p>Cada atendimento começa com a compreensão dos fatos e a conferência dos documentos relevantes. As possibilidades são explicadas de maneira responsável, considerando riscos, procedimentos e particularidades da situação apresentada.</p>
+            <p>O compromisso institucional é manter uma atuação ética, discreta e tecnicamente cuidadosa, com comunicação clara durante todas as etapas do trabalho.</p>
           </div>
-          <div className="image-frame image-frame--tall"><img src="/images/about-office.jpg" alt="Ambiente interno do escritório Almeida & Castro" /></div>
+          <div className="image-frame image-frame--tall image-frame--premium"><img src={ABOUT_IMAGE} alt="Ambiente profissional de atendimento" /></div>
         </div>
       </section>
 
@@ -38,7 +40,7 @@ export default function About() {
           <SectionHeading eyebrow="Direcionamento" title="Missão, visão e valores" align="center" />
           <div className="mission-grid">
             <article><span><Compass /></span><h3>Missão</h3><p>Prestar orientação jurídica responsável, com atendimento próximo, linguagem clara e respeito às normas profissionais.</p></article>
-            <article><span><Eye /></span><h3>Visão</h3><p>Ser reconhecido localmente pela organização, pela confiança institucional e pela qualidade da comunicação com o público.</p></article>
+            <article><span><Eye /></span><h3>Visão</h3><p>Consolidar uma presença jurídica reconhecida pela organização, confiança institucional e qualidade da comunicação.</p></article>
             <article><span><HeartHandshake /></span><h3>Valores</h3><p>Ética, respeito, discrição, clareza, responsabilidade, atualização e atenção às particularidades de cada demanda.</p></article>
           </div>
         </div>
@@ -58,11 +60,11 @@ export default function About() {
 
       <section className="section section--navy timeline-section">
         <div className="container">
-          <SectionHeading eyebrow="Trajetória demonstrativa" title="Linha do tempo" description="Datas e informações fictícias criadas apenas para apresentação do projeto." align="center" />
+          <SectionHeading eyebrow="Trajetória" title="Uma estrutura em constante evolução" description="A organização do escritório acompanha as mudanças na comunicação e nas necessidades de quem busca orientação jurídica." align="center" />
           <div className="timeline">
             {timeline.map((item) => <article key={item.year}><span>{item.year}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></article>)}
           </div>
-          <p className="demo-note"><Check size={17} /> Todo o conteúdo desta página é fictício e deve ser adaptado antes da publicação para um escritório real.</p>
+          <p className="demo-note"><Check size={17} /> Atendimento pautado por ética, responsabilidade e respeito às normas profissionais.</p>
         </div>
       </section>
     </>
