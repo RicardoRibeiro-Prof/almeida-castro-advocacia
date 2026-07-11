@@ -5,20 +5,187 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex,nofollow" />
     <meta name="theme-color" content="#081a2e" />
-    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
     <title>Painel de Conteúdo | Almeida & Castro</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./admin.css" />
   </head>
   <body>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-      window.addEventListener('load', function () {
-        if (!window.netlifyIdentity) return
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-        window.netlifyIdentity.on('logout', function () {
-          window.location.href = '/'
-        })
-      })
-    </script>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <main id="loginView" class="login-view">
+      <section class="login-card">
+        <div class="login-brand">
+          <span class="login-brand__mark">A<span>&</span>C</span>
+          <div><strong>Almeida & Castro</strong><small>Painel de conteúdo</small></div>
+        </div>
+        <span class="eyebrow">Acesso administrativo</span>
+        <h1>Gerencie os artigos diretamente pelo GitHub.</h1>
+        <p>O token fica somente nesta aba do navegador e é enviado apenas para a API oficial do GitHub.</p>
+
+        <form id="loginForm" class="login-form">
+          <label for="token">Token de acesso do GitHub</label>
+          <div class="token-field">
+            <input id="token" name="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..." required />
+            <button id="toggleToken" type="button" class="icon-button" aria-label="Mostrar token">Mostrar</button>
+          </div>
+          <button id="loginButton" class="button button--gold" type="submit">Conectar ao GitHub</button>
+        </form>
+
+        <details class="token-help">
+          <summary>Como criar o token com segurança</summary>
+          <ol>
+            <li>Abra a página de tokens de acesso detalhados.</li>
+            <li>Selecione somente o repositório <strong>almeida-castro-advocacia</strong>.</li>
+            <li>Em permissões, marque <strong>Contents: Read and write</strong>.</li>
+            <li>Copie o token e cole no campo acima.</li>
+          </ol>
+          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Criar token no GitHub</a>
+        </details>
+      </section>
+    </main>
+
+    <div id="appView" class="app-view" hidden>
+      <header class="topbar">
+        <a id="siteLink" class="topbar-brand" href="../" target="_blank" rel="noopener noreferrer">
+          <span>A<span>&</span>C</span>
+          <div><strong>Almeida & Castro</strong><small>Conteúdo jurídico</small></div>
+        </a>
+        <div class="topbar-actions">
+          <span id="userBadge" class="user-badge"></span>
+          <a id="actionsLink" class="button button--ghost" href="https://github.com/RicardoRibeiro-Prof/almeida-castro-advocacia/actions" target="_blank" rel="noopener noreferrer">Ver publicações</a>
+          <button id="logoutButton" class="button button--outline" type="button">Sair</button>
+        </div>
+      </header>
+
+      <div class="layout">
+        <aside class="sidebar">
+          <button class="nav-button is-active" data-view="articles" type="button">Artigos</button>
+          <button id="newArticleAside" class="nav-button" type="button">Novo artigo</button>
+          <a class="nav-button" href="https://github.com/RicardoRibeiro-Prof/almeida-castro-advocacia" target="_blank" rel="noopener noreferrer">Repositório</a>
+          <div class="sidebar-note">
+            <strong>Publicação automática</strong>
+            <p>Cada alteração salva cria um commit e inicia a atualização do site no GitHub Pages.</p>
+          </div>
+        </aside>
+
+        <section class="content">
+          <div id="listView">
+            <div class="page-heading">
+              <div><span class="eyebrow">Gerenciamento</span><h1>Artigos</h1><p>Crie, edite, publique ou exclua conteúdos do site.</p></div>
+              <button id="newArticleButton" class="button button--gold" type="button">+ Novo artigo</button>
+            </div>
+
+            <div class="stats-grid">
+              <article><span>Total</span><strong id="totalCount">0</strong></article>
+              <article><span>Publicados</span><strong id="publishedCount">0</strong></article>
+              <article><span>Ocultos</span><strong id="draftCount">0</strong></article>
+              <article><span>Destaques</span><strong id="featuredCount">0</strong></article>
+            </div>
+
+            <div class="toolbar">
+              <input id="searchInput" type="search" placeholder="Pesquisar por título ou categoria" />
+              <select id="statusFilter">
+                <option value="all">Todos os status</option>
+                <option value="published">Publicados</option>
+                <option value="draft">Ocultos</option>
+              </select>
+              <button id="refreshButton" class="button button--ghost" type="button">Atualizar</button>
+            </div>
+
+            <div id="loadingState" class="loading-state">Carregando artigos…</div>
+            <div id="emptyState" class="empty-state" hidden>Nenhum artigo encontrado.</div>
+            <div id="articleList" class="article-list"></div>
+          </div>
+
+          <div id="editorView" hidden>
+            <div class="page-heading page-heading--editor">
+              <div><button id="backButton" class="back-button" type="button">← Voltar</button><span class="eyebrow">Editor</span><h1 id="editorTitle">Novo artigo</h1></div>
+              <div class="editor-heading-actions">
+                <button id="deleteEditorButton" class="button button--danger" type="button" hidden>Excluir artigo</button>
+                <button id="saveButtonTop" class="button button--gold" type="button">Salvar artigo</button>
+              </div>
+            </div>
+
+            <form id="articleForm" class="article-form">
+              <input id="originalPath" type="hidden" />
+              <input id="originalSha" type="hidden" />
+
+              <div class="form-main">
+                <section class="panel">
+                  <div class="field">
+                    <label for="title">Título</label>
+                    <input id="title" required maxlength="140" />
+                  </div>
+                  <div class="field">
+                    <label for="slug">Endereço do artigo</label>
+                    <input id="slug" required pattern="[a-z0-9-]+" />
+                    <small>Use somente letras minúsculas, números e hífens.</small>
+                  </div>
+                  <div class="field">
+                    <label for="summary">Resumo</label>
+                    <textarea id="summary" rows="4" required maxlength="320"></textarea>
+                  </div>
+                  <div class="field">
+                    <label for="body">Conteúdo completo</label>
+                    <textarea id="body" class="markdown-editor" rows="22" required placeholder="Use ## para subtítulos e - para listas."></textarea>
+                    <small>O editor aceita Markdown.</small>
+                  </div>
+                </section>
+              </div>
+
+              <aside class="form-sidebar">
+                <section class="panel">
+                  <div class="field">
+                    <label for="category">Categoria</label>
+                    <select id="category" required></select>
+                  </div>
+                  <div class="field">
+                    <label for="author">Autor</label>
+                    <input id="author" required value="Almeida & Castro Advocacia" />
+                  </div>
+                  <div class="field">
+                    <label for="date">Data e horário</label>
+                    <input id="date" type="datetime-local" required />
+                  </div>
+                  <div class="field">
+                    <label for="readingTime">Tempo de leitura (minutos)</label>
+                    <input id="readingTime" type="number" min="1" max="60" value="4" required />
+                  </div>
+                  <label class="check-field"><input id="published" type="checkbox" checked /><span>Exibir no site</span></label>
+                  <label class="check-field"><input id="featured" type="checkbox" /><span>Destacar na página inicial</span></label>
+                </section>
+
+                <section class="panel">
+                  <div class="field">
+                    <label for="cover">Imagem de capa</label>
+                    <input id="cover" placeholder="/uploads/imagem.jpg ou URL externa" />
+                  </div>
+                  <label class="upload-button" for="coverFile">Enviar uma imagem</label>
+                  <input id="coverFile" type="file" accept="image/jpeg,image/png,image/webp" hidden />
+                  <div id="uploadProgress" class="upload-progress" hidden>Preparando imagem…</div>
+                  <div id="coverPreview" class="cover-preview"><span>Prévia da capa</span></div>
+                </section>
+
+                <button id="saveButton" class="button button--gold button--full" type="submit">Salvar artigo</button>
+              </aside>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <dialog id="confirmDialog" class="confirm-dialog">
+      <form method="dialog">
+        <span class="eyebrow">Confirmação</span>
+        <h2>Excluir este artigo?</h2>
+        <p id="confirmText"></p>
+        <div><button value="cancel" class="button button--ghost">Cancelar</button><button id="confirmDeleteButton" value="confirm" class="button button--danger">Excluir definitivamente</button></div>
+      </form>
+    </dialog>
+
+    <script src="./admin.js" defer></script>
   </body>
 </html>
