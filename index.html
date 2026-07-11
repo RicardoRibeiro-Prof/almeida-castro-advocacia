@@ -8,32 +8,24 @@
       name="description"
       content="Almeida & Castro Advocacia em São Raimundo Nonato, Piauí. Conteúdo jurídico informativo e atendimento institucional."
     />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="%BASE_URL%favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
     <title>Almeida & Castro Advocacia</title>
+    <script>
+      ;(function () {
+        const redirectKey = 'almeida-castro-pages-redirect'
+        const redirectPath = sessionStorage.getItem(redirectKey)
+        if (redirectPath) {
+          sessionStorage.removeItem(redirectKey)
+          history.replaceState(null, '', redirectPath)
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <script>
-      window.addEventListener('load', function () {
-        const identityScript = document.createElement('script')
-        identityScript.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js'
-        identityScript.async = true
-        identityScript.onload = function () {
-          if (!window.netlifyIdentity) return
-          window.netlifyIdentity.on('init', function (user) {
-            if (!user) {
-              window.netlifyIdentity.on('login', function () {
-                window.location.href = '/admin/'
-              })
-            }
-          })
-        }
-        document.head.appendChild(identityScript)
-      })
-    </script>
   </body>
 </html>
