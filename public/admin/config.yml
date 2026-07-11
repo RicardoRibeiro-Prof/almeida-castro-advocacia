@@ -1,35 +1,54 @@
 backend:
   name: git-gateway
   branch: main
+  commit_messages:
+    create: 'Criar {{collection}} “{{slug}}”'
+    update: 'Atualizar {{collection}} “{{slug}}”'
+    delete: 'Excluir {{collection}} “{{slug}}”'
+    uploadMedia: 'Enviar imagem “{{path}}”'
+    deleteMedia: 'Excluir imagem “{{path}}”'
 
 locale: pt
-publish_mode: editorial_workflow
+publish_mode: simple
+site_url: https://almeida-castro-advocacia.netlify.app
+display_url: https://almeida-castro-advocacia.netlify.app
+show_preview_links: true
+search: true
+
 media_folder: public/uploads
 public_folder: /uploads
-logo_url: /favicon.svg
+
+logo:
+  src: /favicon.svg
+  show_in_header: true
+
+editor:
+  preview: false
 
 slug:
   encoding: ascii
   clean_accents: true
-  sanitize_replacement: "-"
+  sanitize_replacement: '-'
 
 collections:
   - name: artigos
     label: Artigos
     label_singular: Artigo
+    description: Crie, edite, publique ou exclua os artigos exibidos no site.
     folder: src/content/articles
     create: true
+    delete: true
     extension: md
     format: frontmatter
-    slug: "{{slug}}"
+    slug: '{{slug}}'
     identifier_field: title
-    preview_path: "artigos/{{slug}}"
-    summary: "{{title}} — {{category}}"
+    preview_path: 'artigos/{{slug}}'
+    summary: '{{title}} — {{category}}'
     sortable_fields: [date, title, category, author]
     view_filters:
       - label: Destaques
         field: featured
-        pattern: "true"
+        pattern: 'true'
       - label: Direito Civil
         field: category
         pattern: Direito Civil
@@ -49,9 +68,9 @@ collections:
         widget: relation
         collection: configuracoes
         file: categorias
-        search_fields: ["categories.*.name"]
-        display_fields: ["categories.*.name"]
-        value_field: "categories.*.name"
+        search_fields: ['categories.*.name']
+        display_fields: ['categories.*.name']
+        value_field: 'categories.*.name'
       - label: Resumo
         name: summary
         widget: text
@@ -59,10 +78,13 @@ collections:
       - label: Imagem de capa
         name: cover
         widget: image
+        required: false
         choose_url: false
+        allow_multiple: false
+        hint: Envie JPG, PNG ou WebP. Prefira imagens horizontais e leves.
         media_library:
           config:
-            multiple: false
+            max_file_size: 5242880
       - label: Autor
         name: author
         widget: string
@@ -70,9 +92,10 @@ collections:
       - label: Data de publicação
         name: date
         widget: datetime
-        format: "YYYY-MM-DDTHH:mm:ss.SSSZ"
-        date_format: "DD/MM/YYYY"
-        time_format: "HH:mm"
+        default: '{{now}}'
+        format: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
+        date_format: 'DD/MM/YYYY'
+        time_format: 'HH:mm'
       - label: Tempo estimado de leitura
         name: readingTime
         widget: number
@@ -84,11 +107,11 @@ collections:
         name: featured
         widget: boolean
         default: false
-      - label: Exibir no site quando publicado
+      - label: Exibir no site
         name: published
         widget: boolean
         default: true
-        hint: Desative somente para ocultar um artigo já publicado no repositório.
+        hint: Desative para manter o artigo salvo, mas oculto do site.
       - label: Conteúdo completo
         name: body
         widget: markdown
@@ -98,6 +121,7 @@ collections:
 
   - name: configuracoes
     label: Configurações
+    delete: false
     files:
       - name: categorias
         label: Categorias
@@ -106,7 +130,7 @@ collections:
           - label: Categorias do blog
             name: categories
             widget: list
-            summary: "{{fields.name}}"
+            summary: '{{fields.name}}'
             min: 1
             fields:
               - label: Nome
@@ -116,5 +140,5 @@ collections:
                 name: slug
                 widget: string
                 pattern:
-                  - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  - '^[a-z0-9]+(?:-[a-z0-9]+)*$'
                   - Use apenas letras minúsculas, números e hífens.
