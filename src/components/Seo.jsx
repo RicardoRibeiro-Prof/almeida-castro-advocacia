@@ -10,19 +10,23 @@ function setMeta(selector, attributes) {
   Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value))
 }
 
+function toAbsoluteUrl(value) {
+  if (!value) return new URL(`${import.meta.env.BASE_URL}images/hero-office.jpg`, window.location.origin).href
+  if (/^(https?:|data:|blob:)/i.test(value)) return value
+  return new URL(value.replace(/^\//, ''), `${window.location.origin}${import.meta.env.BASE_URL}`).href
+}
+
 export default function Seo({
   title,
   description,
-  image = '/images/hero-office.jpg',
+  image,
   type = 'website',
   noIndex = false,
 }) {
   useEffect(() => {
     const fullTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME
     const canonical = window.location.href.split('?')[0]
-    const absoluteImage = image?.startsWith('http')
-      ? image
-      : `${window.location.origin}${image || '/images/hero-office.jpg'}`
+    const absoluteImage = toAbsoluteUrl(image)
 
     document.title = fullTitle
     setMeta('meta[name="description"]', { name: 'description', content: description })
