@@ -3,7 +3,7 @@ title: "Direitos básicos do trabalhador"
 slug: "direitos-basicos-do-trabalhador"
 category: "Direito Trabalhista"
 summary: "Um panorama informativo sobre registro, jornada, remuneração, descanso e encerramento do vínculo de emprego."
-cover: "/images/articles/trabalho.jpg"
+cover: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=86"
 author: "Dra. Marina Castro"
 date: "2026-05-20T12:00:00.000Z"
 readingTime: 3
