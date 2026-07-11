@@ -9,6 +9,8 @@ import { formatDate } from '../utils/format'
 import { sanitizeHtml } from '../utils/sanitize'
 import NotFound from './NotFound'
 
+const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=1600&q=85'
+
 export default function ArticleDetail() {
   const { slug } = useParams()
   const [article, setArticle] = useState(null)
@@ -58,7 +60,7 @@ export default function ArticleDetail() {
             </div>
           </div>
         </header>
-        <div className="container article-cover"><img src={article.cover_image_url || '/images/articles/default.jpg'} alt={`Imagem de capa do artigo: ${article.title}`} /></div>
+        <div className="container article-cover"><img src={article.cover_image_url || FALLBACK_IMAGE} alt={`Imagem de capa do artigo: ${article.title}`} onError={(event) => { event.currentTarget.src = FALLBACK_IMAGE }} /></div>
         <div className="container article-layout">
           <div>
             <div className="article-content" dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.content) }} />
