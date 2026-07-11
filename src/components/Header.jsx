@@ -1,8 +1,9 @@
 import { ChevronDown, Menu, MessageCircle, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import Brand from './Brand'
 import { practiceAreas } from '../data/practiceAreas'
-import { getWhatsAppUrl, SITE_SHORT_NAME } from '../utils/constants'
+import { getWhatsAppUrl } from '../utils/constants'
 
 const navItems = [
   { label: 'Início', to: '/' },
@@ -25,13 +26,7 @@ export default function Header() {
   return (
     <header className="site-header">
       <div className="container site-header__inner">
-        <Link className="brand" to="/" aria-label={`${SITE_SHORT_NAME} - página inicial`}>
-          <span className="brand__mark">A<span>&</span>C</span>
-          <span className="brand__text">
-            <strong>Almeida & Castro</strong>
-            <small>Advocacia</small>
-          </span>
-        </Link>
+        <Brand />
 
         <button
           type="button"
