@@ -1,0 +1,27 @@
+{
+  "name": "almeida-castro-advocacia-decap",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "prebuild": "node scripts/generate-sitemap.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint:imports": "node scripts/check-imports.mjs"
+  },
+  "dependencies": {
+    "dompurify": "^3.2.4",
+    "js-yaml": "^4.1.0",
+    "lucide-react": "^0.468.0",
+    "marked": "^15.0.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "dotenv": "^16.4.7",
+    "vite": "^6.0.5"
+  }
+}

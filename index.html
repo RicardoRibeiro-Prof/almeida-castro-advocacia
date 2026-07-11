@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f2744" />
+    <meta
+      name="description"
+      content="Almeida & Castro Advocacia em São Raimundo Nonato, Piauí. Conteúdo jurídico informativo e atendimento institucional."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>Almeida & Castro Advocacia</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      window.addEventListener('load', function () {
+        const identityScript = document.createElement('script')
+        identityScript.src = 'https://identity.netlify.com/v1/netlify-identity-widget.js'
+        identityScript.async = true
+        identityScript.onload = function () {
+          if (!window.netlifyIdentity) return
+          window.netlifyIdentity.on('init', function (user) {
+            if (!user) {
+              window.netlifyIdentity.on('login', function () {
+                window.location.href = '/admin/'
+              })
+            }
+          })
+        }
+        document.head.appendChild(identityScript)
+      })
+    </script>
+  </body>
+</html>

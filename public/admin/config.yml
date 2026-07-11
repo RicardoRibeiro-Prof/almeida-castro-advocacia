@@ -1,0 +1,120 @@
+backend:
+  name: git-gateway
+  branch: main
+
+locale: pt
+publish_mode: editorial_workflow
+media_folder: public/uploads
+public_folder: /uploads
+logo_url: /favicon.svg
+
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: "-"
+
+collections:
+  - name: artigos
+    label: Artigos
+    label_singular: Artigo
+    folder: src/content/articles
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    identifier_field: title
+    preview_path: "artigos/{{slug}}"
+    summary: "{{title}} — {{category}}"
+    sortable_fields: [date, title, category, author]
+    view_filters:
+      - label: Destaques
+        field: featured
+        pattern: "true"
+      - label: Direito Civil
+        field: category
+        pattern: Direito Civil
+      - label: Direito Previdenciário
+        field: category
+        pattern: Direito Previdenciário
+      - label: Direito Trabalhista
+        field: category
+        pattern: Direito Trabalhista
+    fields:
+      - label: Título
+        name: title
+        widget: string
+        hint: O endereço do artigo será gerado automaticamente a partir deste título.
+      - label: Categoria
+        name: category
+        widget: relation
+        collection: configuracoes
+        file: categorias
+        search_fields: ["categories.*.name"]
+        display_fields: ["categories.*.name"]
+        value_field: "categories.*.name"
+      - label: Resumo
+        name: summary
+        widget: text
+        hint: Texto curto que será mostrado nos cards e nos resultados de busca.
+      - label: Imagem de capa
+        name: cover
+        widget: image
+        choose_url: false
+        media_library:
+          config:
+            multiple: false
+      - label: Autor
+        name: author
+        widget: string
+        default: Almeida & Castro Advocacia
+      - label: Data de publicação
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DDTHH:mm:ss.SSSZ"
+        date_format: "DD/MM/YYYY"
+        time_format: "HH:mm"
+      - label: Tempo estimado de leitura
+        name: readingTime
+        widget: number
+        value_type: int
+        min: 1
+        max: 60
+        default: 4
+      - label: Destacar na página inicial
+        name: featured
+        widget: boolean
+        default: false
+      - label: Exibir no site quando publicado
+        name: published
+        widget: boolean
+        default: true
+        hint: Desative somente para ocultar um artigo já publicado no repositório.
+      - label: Conteúdo completo
+        name: body
+        widget: markdown
+        modes: [rich_text, raw]
+        required: true
+        hint: O conteúdo é informativo e não deve prometer resultado nem substituir análise individualizada.
+
+  - name: configuracoes
+    label: Configurações
+    files:
+      - name: categorias
+        label: Categorias
+        file: src/content/settings/categories.yml
+        fields:
+          - label: Categorias do blog
+            name: categories
+            widget: list
+            summary: "{{fields.name}}"
+            min: 1
+            fields:
+              - label: Nome
+                name: name
+                widget: string
+              - label: Slug
+                name: slug
+                widget: string
+                pattern:
+                  - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+                  - Use apenas letras minúsculas, números e hífens.
