@@ -3,7 +3,7 @@ title: "O que deve ser observado antes de assinar um contrato"
 slug: "o-que-deve-ser-observado-antes-de-assinar-um-contrato"
 category: "Direito Civil"
 summary: "Uma leitura cuidadosa pode esclarecer obrigações, prazos, garantias, multas e hipóteses de encerramento do contrato."
-cover: "/images/articles/contrato.jpg"
+cover: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=86"
 author: "Dr. Rafael Almeida"
 date: "2026-06-10T12:00:00.000Z"
 readingTime: 4
