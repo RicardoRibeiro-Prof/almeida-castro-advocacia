@@ -3,7 +3,7 @@ title: "Planejamento previdenciário: quando pode ser importante"
 slug: "planejamento-previdenciario-quando-pode-ser-importante"
 category: "Direito Previdenciário"
 summary: "O planejamento previdenciário organiza dados contributivos e permite comparar cenários antes do requerimento de um benefício."
-cover: "/images/articles/planejamento.jpg"
+cover: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1400&q=86"
 author: "Dra. Marina Castro"
 date: "2026-05-10T12:00:00.000Z"
 readingTime: 3
