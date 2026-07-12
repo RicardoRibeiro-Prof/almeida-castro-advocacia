@@ -13,7 +13,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="./admin.css?v=20260711-2" />
+    <link rel="stylesheet" href="./admin.css?v=20260711-3" />
+    <style>
+      .saved-login-notice{padding:12px 14px;border:1px solid rgba(201,162,93,.35);border-radius:12px;background:rgba(201,162,93,.08);font-size:.9rem;line-height:1.5}
+      .saved-login-notice strong{display:block;color:#c9a25d;margin-bottom:3px}
+      .login-secondary{width:100%;border:0;background:transparent;color:#9fb0c2;text-decoration:underline;cursor:pointer;padding:4px;font:inherit}
+      .login-secondary:hover{color:#fff}
+      .login-form [hidden]{display:none!important}
+    </style>
   </head>
   <body>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
@@ -25,27 +32,46 @@
           <div><strong>Almeida & Castro</strong><small>Painel de conteúdo</small></div>
         </div>
         <span class="eyebrow">Acesso administrativo</span>
-        <h1>Gerencie os artigos diretamente pelo GitHub.</h1>
-        <p>O token fica somente nesta aba do navegador e é enviado apenas para a API oficial do GitHub.</p>
+        <h1 id="loginTitle">Configure o acesso por senha.</h1>
+        <p id="loginDescription">No primeiro acesso, informe o token e crie uma senha. Depois, neste navegador, você usará somente a senha.</p>
 
         <form id="loginForm" class="login-form">
-          <label for="token">Token de acesso do GitHub</label>
-          <div class="token-field">
-            <input id="token" name="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..." required />
-            <button id="toggleToken" type="button" class="icon-button" aria-label="Mostrar token">Mostrar</button>
+          <div id="savedLoginNotice" class="saved-login-notice" hidden>
+            <strong>Acesso protegido neste navegador</strong>
+            O token está criptografado e será desbloqueado somente com sua senha.
           </div>
-          <button id="loginButton" class="button button--gold" type="submit">Conectar ao GitHub</button>
+
+          <div id="tokenGroup">
+            <label for="token">Token de acesso do GitHub</label>
+            <div class="token-field">
+              <input id="token" name="token" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_..." required />
+              <button id="toggleToken" type="button" class="icon-button" aria-label="Mostrar token">Mostrar</button>
+            </div>
+          </div>
+
+          <div>
+            <label for="password">Senha do painel</label>
+            <input id="password" name="password" type="password" minlength="8" autocomplete="new-password" placeholder="Mínimo de 8 caracteres" required />
+          </div>
+
+          <div id="confirmPasswordGroup">
+            <label for="confirmPassword">Confirme a senha</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" minlength="8" autocomplete="new-password" placeholder="Digite a senha novamente" required />
+          </div>
+
+          <button id="loginButton" class="button button--gold" type="submit">Salvar acesso e entrar</button>
+          <button id="resetAccessButton" class="login-secondary" type="button" hidden>Esqueci a senha ou quero trocar o token</button>
         </form>
 
         <details class="token-help">
-          <summary>Como criar o token com segurança</summary>
+          <summary>Como funciona o acesso protegido</summary>
           <ol>
-            <li>Abra a página de tokens de acesso detalhados.</li>
-            <li>Selecione somente o repositório <strong>almeida-castro-advocacia</strong>.</li>
-            <li>Em permissões, marque <strong>Contents: Read and write</strong>.</li>
-            <li>Copie o token e cole no campo acima.</li>
+            <li>No primeiro acesso, informe o token e crie uma senha com pelo menos 8 caracteres.</li>
+            <li>O token será criptografado e salvo somente neste navegador.</li>
+            <li>Nos próximos acessos, você digitará apenas a senha.</li>
+            <li>Em outro computador ou navegador, será preciso configurar o acesso novamente.</li>
           </ol>
-          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Criar token no GitHub</a>
+          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Criar novo token no GitHub</a>
         </details>
       </section>
     </main>
@@ -189,7 +215,8 @@
       </form>
     </dialog>
 
-    <script src="./admin.js?v=20260711-2" defer></script>
-    <script src="./admin-delete-fix.js?v=20260711-2" defer></script>
+    <script src="./admin-password.js?v=20260711-3" defer></script>
+    <script src="./admin.js?v=20260711-3" defer></script>
+    <script src="./admin-delete-fix.js?v=20260711-3" defer></script>
   </body>
 </html>
