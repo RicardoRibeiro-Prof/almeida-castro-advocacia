@@ -3,12 +3,17 @@ title: "Planejamento previdenciário: quando pode ser importante"
 slug: "planejamento-previdenciario-quando-pode-ser-importante"
 category: "Direito Previdenciário"
 summary: "O planejamento previdenciário organiza dados contributivos e permite comparar cenários antes do requerimento de um benefício."
-cover: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&w=1400&q=86"
+excerpt: "Veja como a organização do histórico contributivo pode ajudar a comparar cenários antes de solicitar um benefício."
+cover: "/images/articles/default.svg"
+coverAlt: "Ilustração institucional sobre planejamento previdenciário"
 author: "Dra. Marina Castro"
 date: "2026-06-14T12:00:00.000Z"
+updatedAt: "2026-07-12T12:00:00.000Z"
+keywords: ["planejamento previdenciário", "CNIS", "aposentadoria"]
 readingTime: 5
 featured: false
 published: true
+noIndex: false
 ---
 O planejamento previdenciário é uma análise do histórico de contribuições e das regras aplicáveis. Seu objetivo é organizar informações, identificar possíveis inconsistências e comparar cenários antes do requerimento de um benefício.
 
