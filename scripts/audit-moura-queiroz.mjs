@@ -24,6 +24,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const cleanText = (html = '') => String(html).replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 const extract = (html, pattern) => html.match(pattern)?.[1]?.trim() || ''
 const expectedCanonical = (route = '') => new URL(route, `${projectUrl}/`).href
+const validEmptySitemap = (xml = '') => /<urlset\b[^>]*xmlns=["']http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9["'][^>]*>\s*<\/urlset>/i.test(xml)
 
 async function exists(filePath) {
   try { await fs.access(filePath); return true } catch { return false }
@@ -33,7 +34,7 @@ async function fetchRetry(url) {
   let error
   for (let attempt = 1; attempt <= 18; attempt += 1) {
     try {
-      const response = await fetch(url, { redirect: 'follow', headers: { 'User-Agent': 'MouraQueirozAudit/1.0' } })
+      const response = await fetch(url, { redirect: 'follow', headers: { 'User-Agent': 'MouraQueirozAudit/1.1' } })
       if (response.ok || response.status === 404) return response
       error = new Error(`HTTP ${response.status}`)
     } catch (caught) { error = caught }
@@ -122,7 +123,7 @@ if (!remote) {
   for (const item of required) if (!(await exists(path.join(distRoot, item)))) failures.push(`Arquivo ausente: ${item}`)
 
   const sitemap = await fs.readFile(path.join(distRoot, 'sitemap.xml'), 'utf8').catch(() => '')
-  if (!/<urlset\s+xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"><\/urlset>/i.test(sitemap.replace(/\s+/g, ''))) failures.push('Sitemap demonstrativo não está vazio ou é inválido')
+  if (!validEmptySitemap(sitemap) || /<url>/i.test(sitemap)) failures.push('Sitemap demonstrativo não está vazio ou é inválido')
 } else {
   for (const assetUrl of assets) {
     try {
@@ -137,7 +138,7 @@ if (!remote) {
   try {
     const response = await fetchRetry(`${remoteBase}/sitemap.xml`)
     const xml = await response.text()
-    if (!response.ok || /<url>/i.test(xml)) failures.push('Sitemap publicado deve ser válido e vazio em demonstração')
+    if (!response.ok || !validEmptySitemap(xml) || /<url>/i.test(xml)) failures.push('Sitemap publicado deve ser válido e vazio em demonstração')
   } catch (error) { failures.push(`Sitemap publicado: ${error.message}`) }
 }
 
