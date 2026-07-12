@@ -2,32 +2,22 @@
 
 Resultado: **SUCESSO**
 
-- Data UTC: 2026-07-12 12:16:19
-- Commit verificado: 260140ff110560790c47ddec6dbdeaec04dc77e8
+- Data UTC: 2026-07-12 12:19:44
+- Commit verificado: d07099a152135002fcd4756da1b2bae10b95cbe5
 - Node: v20.19.5
 - npm: 10.8.2
 - npm ci: código 0
 - lint:imports: código 0
-- build completo: código 0
-- rotas, artigos e HTMLs essenciais: código 0
+- build, pré-renderização e validação: código 0
 
-## Saída do npm ci
 ```text
 
 added 76 packages in 2s
-```
-
-## Saída do lint
-```text
 
 > almeida-castro-advocacia@2.1.0 lint:imports
 > node scripts/check-imports.mjs
 
 Importações locais verificadas em 37 arquivos.
-```
-
-## Saída do build
-```text
 
 > almeida-castro-advocacia@2.1.0 prebuild
 > node scripts/check-config.mjs
@@ -67,7 +57,7 @@ computing gzip size...
 [2mdist/[22m[2massets/[22m[36mrouter-C2EwdcZZ.js              [39m[1m[2m 36.94 kB[22m[1m[22m[2m │ gzip: 13.40 kB[22m
 [2mdist/[22m[2massets/[22m[36mcontent-CIBh7jNU.js             [39m[1m[2m 83.28 kB[22m[1m[22m[2m │ gzip: 26.80 kB[22m
 [2mdist/[22m[2massets/[22m[36mreact-vendor-WaWdzvzX.js        [39m[1m[2m142.92 kB[22m[1m[22m[2m │ gzip: 45.78 kB[22m
-[32m✓ built in 3.10s[39m
+[32m✓ built in 2.85s[39m
 
 > almeida-castro-advocacia@2.1.0 postbuild
 > node scripts/static-export.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && node scripts/generate-manifest.mjs && node scripts/validate-build.mjs
@@ -76,5 +66,5 @@ Exportação estática concluída: 21 páginas públicas e página 404.
 Sitemap demonstrativo gerado sem URLs indexáveis.
 robots.txt de demonstração gerado com bloqueio total.
 Manifest gerado.
-Build validado: 13 rotas estáticas, SEO e arquivos essenciais conferidos.
+Build validado: 13 rotas estáticas, 8 artigos, SEO e arquivos essenciais conferidos.
 ```
