@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /admin/
-
-Sitemap: https://seu-dominio.com.br/sitemap.xml
