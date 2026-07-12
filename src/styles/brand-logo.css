@@ -30,8 +30,8 @@
   opacity: 0.32;
 }
 
-.brand__letter,
-.brand__amp {
+.brand__mark .brand__letter,
+.brand__mark .brand__amp {
   position: relative;
   z-index: 1;
   color: var(--brand-logo-color);
@@ -40,7 +40,7 @@
   line-height: 1;
 }
 
-.brand__letter {
+.brand__mark .brand__letter {
   font-size: 1.15rem;
 }
 
@@ -52,7 +52,7 @@
   transform: translateY(-2px);
 }
 
-.brand__amp {
+.brand__mark .brand__amp {
   margin: -2px 0;
   font-size: 0.88rem;
 }
@@ -86,8 +86,8 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
-.brand--footer .brand__letter,
-.brand--footer .brand__amp,
+.brand--footer .brand__mark .brand__letter,
+.brand--footer .brand__mark .brand__amp,
 .brand--footer .brand__text strong,
 .brand--footer .brand__text small {
   color: var(--brand-logo-color);
@@ -103,11 +103,11 @@
     height: 46px;
   }
 
-  .brand__letter {
+  .brand__mark .brand__letter {
     font-size: 0.98rem;
   }
 
-  .brand__amp {
+  .brand__mark .brand__amp {
     font-size: 0.75rem;
   }
 
