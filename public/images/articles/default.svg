@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Conteúdo jurídico Almeida &amp; Castro</title>
+  <desc id="desc">Capa institucional de artigo em azul-marinho, branco e dourado.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#081a2e"/><stop offset="1" stop-color="#14395e"/></linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#ffffff" stroke-opacity=".05"/></pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <circle cx="970" cy="110" r="210" fill="#bf9650" fill-opacity=".12"/>
+  <circle cx="1060" cy="540" r="260" fill="#ffffff" fill-opacity=".04"/>
+  <rect x="88" y="80" width="5" height="470" rx="2.5" fill="#bf9650"/>
+  <text x="130" y="235" fill="#bf9650" font-family="Arial, sans-serif" font-size="28" letter-spacing="6">CONTEÚDO JURÍDICO</text>
+  <text x="130" y="340" fill="#ffffff" font-family="Georgia, serif" font-size="70" font-weight="700">Almeida &amp; Castro</text>
+  <text x="132" y="405" fill="#d9e2ec" font-family="Arial, sans-serif" font-size="32">Informação clara para decisões mais conscientes.</text>
+  <text x="132" y="500" fill="#9fb0c2" font-family="Arial, sans-serif" font-size="24">Projeto demonstrativo • São Raimundo Nonato – PI</text>
+</svg>
