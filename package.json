@@ -12,10 +12,12 @@
     "dev": "vite",
     "prebuild": "node scripts/check-config.mjs && node scripts/download-site-images.mjs",
     "build": "vite build",
-    "postbuild": "node scripts/static-export.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && node scripts/generate-manifest.mjs && node scripts/validate-build.mjs",
+    "postbuild": "node scripts/static-export.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && node scripts/generate-manifest.mjs && node scripts/validate-build.mjs && node scripts/audit-dist.mjs",
     "preview": "vite preview",
     "lint:imports": "node scripts/check-imports.mjs",
     "validate:build": "node scripts/validate-build.mjs",
+    "audit:dist": "node scripts/audit-dist.mjs",
+    "audit:deployed": "node scripts/audit-deployed-site.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "generate:robots": "node scripts/generate-robots.mjs"
   },
