@@ -1,5 +1,7 @@
 .brand {
+  --brand-logo-color: var(--navy-950);
   gap: 14px;
+  color: var(--brand-logo-color);
 }
 
 .brand__mark {
@@ -12,30 +14,33 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  border: 2px solid var(--brand-logo-color);
   border-radius: 50%;
-  background: linear-gradient(155deg, #0e2846 0%, #081a2e 100%);
-  box-shadow: 0 10px 22px rgba(8, 26, 46, 0.16);
+  color: var(--brand-logo-color);
+  background: transparent;
+  box-shadow: 0 8px 20px rgba(8, 26, 46, 0.1);
 }
 
 .brand__mark::before {
   position: absolute;
   inset: 4px;
-  border: 1px solid rgba(199, 164, 95, 0.45);
+  border: 1px solid currentColor;
   border-radius: 50%;
   content: "";
+  opacity: 0.32;
 }
 
 .brand__letter,
 .brand__amp {
   position: relative;
   z-index: 1;
+  color: var(--brand-logo-color);
   font-family: "Playfair Display", Georgia, serif;
   font-weight: 700;
   line-height: 1;
 }
 
 .brand__letter {
-  color: var(--white);
   font-size: 1.15rem;
 }
 
@@ -49,7 +54,6 @@
 
 .brand__amp {
   margin: -2px 0;
-  color: var(--gold-500);
   font-size: 0.88rem;
 }
 
@@ -57,33 +61,36 @@
   line-height: 1.02;
 }
 
-.brand__text strong {
+.brand .brand__text strong {
+  color: var(--brand-logo-color);
   font-size: 1.52rem;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
-.brand__text small {
+.brand .brand__text small {
   margin-top: 6px;
+  color: var(--brand-logo-color);
   font-size: 0.73rem;
   letter-spacing: 0.28em;
 }
 
+.brand--footer {
+  --brand-logo-color: var(--gold-300);
+}
+
 .brand--footer .brand__mark {
-  background: linear-gradient(155deg, #d4b06b 0%, #b98d46 100%);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  border-color: var(--brand-logo-color);
+  color: var(--brand-logo-color);
+  background: transparent;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
-.brand--footer .brand__letter {
-  color: var(--navy-950);
-}
-
-.brand--footer .brand__amp {
-  color: var(--white);
-}
-
+.brand--footer .brand__letter,
+.brand--footer .brand__amp,
+.brand--footer .brand__text strong,
 .brand--footer .brand__text small {
-  color: var(--gold-300);
+  color: var(--brand-logo-color);
 }
 
 @media (max-width: 680px) {
@@ -104,11 +111,11 @@
     font-size: 0.75rem;
   }
 
-  .brand__text strong {
+  .brand .brand__text strong {
     font-size: 1.08rem;
   }
 
-  .brand__text small {
+  .brand .brand__text small {
     font-size: 0.6rem;
     letter-spacing: 0.2em;
   }
