@@ -10,16 +10,68 @@
   from = "/admin/login"
   to = "/admin/"
   status = 301
+  force = true
 
 [[redirects]]
   from = "/admin/*"
   to = "/admin/index.html"
   status = 200
+  force = true
 
+# Arquivos reais, incluindo /sobre/index.html e artigos pré-renderizados,
+# têm prioridade. O fallback é aplicado somente quando o arquivo não existe.
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
+
+# HTML e rotas sem extensão devem sempre ser revalidados após um deploy.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Bundles do Vite possuem hash no nome e podem permanecer em cache por um ano.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/icons/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/uploads/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, stale-while-revalidate=86400"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "public, max-age=3600, must-revalidate"
 
 [[headers]]
   for = "/admin/*"
@@ -27,13 +79,3 @@
     Cache-Control = "no-store, no-cache, must-revalidate, max-age=0"
     Pragma = "no-cache"
     X-Robots-Tag = "noindex, nofollow"
-
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "no-cache, max-age=0, must-revalidate"
-
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
