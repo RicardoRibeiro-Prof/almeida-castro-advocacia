@@ -5,6 +5,7 @@ import App from './App'
 import './styles/global.css'
 import './styles/premium.css'
 import './styles/brand-logo.css'
+import './styles/accessibility.css'
 
 const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
 
