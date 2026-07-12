@@ -7,7 +7,11 @@ import { teamMembers } from '../data/team'
 export default function Team() {
   return (
     <>
-      <Seo title="Equipe" description="Conheça a equipe da Almeida & Castro Advocacia e suas áreas de atuação em São Raimundo Nonato." />
+      <Seo
+        title="Equipe | Almeida & Castro Advocacia"
+        description="Conheça a equipe demonstrativa da Almeida & Castro Advocacia e suas principais áreas de atuação jurídica."
+        path="/equipe"
+      />
       <PageHero
         eyebrow="Profissionais"
         title="Nossa Equipe"
@@ -24,7 +28,7 @@ export default function Team() {
           <div className="team-grid team-grid--detailed">
             {teamMembers.map((member) => <TeamCard key={member.name} member={member} detailed />)}
           </div>
-          <p className="team-image-note">Imagens e dados profissionais utilizados para apresentação institucional do projeto.</p>
+          <p className="team-image-note" role="note">Os nomes, registros, formações, imagens e biografias desta equipe são fictícios e integram somente a demonstração do projeto.</p>
         </div>
       </section>
       <section className="section section--soft">
