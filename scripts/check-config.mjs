@@ -52,9 +52,10 @@ if (ALLOW_INDEXING !== (INDEXING_REQUESTED && !IS_DEMO && PRODUCTION_DATA_CONFIR
 
 const homeCanonical = buildCanonicalUrl('/')
 const aboutCanonical = buildCanonicalUrl('/sobre')
+const cleanBase = BASE_PATH.replace(/^\/+|\/+$/g, '')
 if (!homeCanonical.startsWith(`${SITE_URL}/`)) errors.push('Canonical da página inicial não utiliza VITE_SITE_URL.')
 if (!aboutCanonical.startsWith(`${SITE_URL}/`)) errors.push('Canonical de página interna não utiliza VITE_SITE_URL.')
-if (aboutCanonical.includes(`${BASE_PATH.replace(/^\/+|\/+$/g, '')}/${BASE_PATH.replace(/^\/+|\/+$/g, '')}`)) {
+if (cleanBase && aboutCanonical.includes(`${cleanBase}/${cleanBase}`)) {
   errors.push('Canonical contém o caminho-base duplicado.')
 }
 
