@@ -1,8 +1,14 @@
 import { Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Brand from './Brand'
+import SITE from '../config/site'
 import { practiceAreas } from '../data/practiceAreas'
 import { CONTACT_INFO, SITE_NAME } from '../utils/constants'
+
+const socialItems = [
+  { key: 'instagram', label: 'Instagram', url: CONTACT_INFO.instagram, icon: Instagram },
+  { key: 'linkedin', label: 'LinkedIn', url: CONTACT_INFO.linkedin, icon: Linkedin },
+].filter((item) => /^https?:\/\//i.test(item.url || ''))
 
 export default function Footer() {
   return (
@@ -11,10 +17,15 @@ export default function Footer() {
         <div className="footer-brand">
           <Brand footer />
           <p>Atuação jurídica institucional, responsável e orientada por ética, clareza e atenção às particularidades de cada demanda.</p>
-          <div className="social-links">
-            <a href={CONTACT_INFO.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram size={19} /></a>
-            <a href={CONTACT_INFO.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin size={19} /></a>
-          </div>
+          {socialItems.length > 0 && (
+            <div className="social-links" aria-label="Redes sociais">
+              {socialItems.map(({ key, label, url, icon: Icon }) => (
+                <a key={key} href={url} target="_blank" rel="noopener noreferrer" aria-label={label}>
+                  <Icon size={19} aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
 
         <div>
@@ -39,17 +50,20 @@ export default function Footer() {
 
         <div>
           <h2>Contato</h2>
-          <ul className="footer-contact">
-            <li><MapPin size={18} /><span>{CONTACT_INFO.address}</span></li>
-            <li><Phone size={18} /><span>{CONTACT_INFO.phone}</span></li>
-            <li><Mail size={18} /><a href={`mailto:${CONTACT_INFO.email}`}>{CONTACT_INFO.email}</a></li>
-          </ul>
+          <address>
+            <ul className="footer-contact">
+              <li><MapPin size={18} aria-hidden="true" /><span>{CONTACT_INFO.address}</span></li>
+              <li><Phone size={18} aria-hidden="true" /><a href={`tel:${SITE.phone.replace(/\D/g, '')}`}>{CONTACT_INFO.phone}</a></li>
+              <li><Mail size={18} aria-hidden="true" /><a href={`mailto:${CONTACT_INFO.email}`}>{CONTACT_INFO.email}</a></li>
+            </ul>
+          </address>
         </div>
       </div>
 
       <div className="footer-legal">
         <div className="container">
           <p>Este site possui caráter exclusivamente informativo e não representa promessa de resultado.</p>
+          {SITE.isDemo && <p><strong>Projeto demonstrativo:</strong> os nomes, registros profissionais e dados de contato são fictícios.</p>}
           <div>
             <span>© {new Date().getFullYear()} {SITE_NAME}</span>
             <span>Desenvolvido por <strong>Ativa Digital ON</strong></span>
