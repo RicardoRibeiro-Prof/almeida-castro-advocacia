@@ -47,6 +47,26 @@
   outline: none;
 }
 
+.breadcrumbs ol {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.breadcrumbs li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.breadcrumbs [aria-current="page"] {
+  font-weight: 600;
+}
+
 .site-footer address {
   font-style: normal;
 }
@@ -59,9 +79,25 @@
   min-height: 44px;
 }
 
-.status-message[role="alert"] {
+.status-message[role="alert"],
+.status-message[role="status"] {
   border-left: 4px solid currentColor;
   padding-left: 0.8rem;
+}
+
+.not-found__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.contact-form small {
+  display: block;
+  margin-top: 0.35rem;
+  line-height: 1.45;
 }
 
 @media (prefers-reduced-motion: reduce) {
