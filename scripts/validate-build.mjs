@@ -44,6 +44,9 @@ function validateHtml(routePath, html, { article = false } = {}) {
     if (!pattern.test(html)) failures.push(`${routePath}: ${label} ausente.`)
   }
   if (html.includes('seu-dominio.com.br')) failures.push(`${routePath}: domínio fictício encontrado.`)
+  if (html.includes('default.svg') || html.includes('team-rafael.svg') || html.includes('team-marina.svg') || html.includes('hero-office.svg')) {
+    failures.push(`${routePath}: referência a imagem antiga ou corrompida encontrada.`)
+  }
   if (!html.includes(SITE_URL)) failures.push(`${routePath}: URL oficial não encontrada nos metadados.`)
   if (!IS_DEMO && ALLOW_INDEXING && !/application\/ld\+json/i.test(html)) failures.push(`${routePath}: JSON-LD ausente em produção.`)
   if (IS_DEMO && !/noindex, nofollow/i.test(html)) failures.push(`${routePath}: noindex ausente no modo demonstração.`)
@@ -52,6 +55,30 @@ function validateHtml(routePath, html, { article = false } = {}) {
 const essential = ['index.html', '404.html', 'sitemap.xml', 'robots.txt', 'manifest.webmanifest']
 for (const file of essential) {
   if (!(await exists(path.join(distDir, file)))) failures.push(`Arquivo essencial ausente: ${file}`)
+}
+
+const essentialImages = [
+  'images/hero-office.jpg',
+  'images/about-office.jpg',
+  'images/team-rafael.jpg',
+  'images/team-marina.jpg',
+  'images/articles/previdenciario.jpg',
+  'images/articles/familia.jpg',
+  'images/articles/trabalhista.jpg',
+  'images/articles/consumidor.jpg',
+  'images/articles/civil.jpg',
+  'images/articles/empresarial.jpg',
+  'images/articles/general.jpg',
+]
+
+for (const image of essentialImages) {
+  const filePath = path.join(distDir, image)
+  if (!(await exists(filePath))) {
+    failures.push(`Fotografia ausente no build: ${image}`)
+    continue
+  }
+  const stat = await fs.stat(filePath)
+  if (stat.size < 25_000) failures.push(`Fotografia inválida ou pequena demais: ${image} (${stat.size} bytes)`)
 }
 
 for (const route of allStaticRoutes) {
@@ -109,4 +136,4 @@ if (failures.length) {
   process.exit(1)
 }
 
-console.log(`Build validado: ${allStaticRoutes.length} rotas estáticas, ${articleCount} artigos, SEO e arquivos essenciais conferidos.`)
+console.log(`Build validado: ${allStaticRoutes.length} rotas estáticas, ${articleCount} artigos e ${essentialImages.length} fotografias conferidos.`)
