@@ -3,12 +3,17 @@ title: "Direitos básicos do trabalhador"
 slug: "direitos-basicos-do-trabalhador"
 category: "Direito Trabalhista"
 summary: "Um panorama informativo sobre registro, jornada, remuneração, descanso e encerramento do vínculo de emprego."
-cover: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=86"
+excerpt: "Conheça pontos básicos sobre registro, jornada, remuneração, descanso e encerramento da relação de emprego."
+cover: "/images/articles/default.svg"
+coverAlt: "Ilustração institucional sobre direitos básicos do trabalhador"
 author: "Dra. Marina Castro"
 date: "2026-06-22T12:00:00.000Z"
+updatedAt: "2026-07-12T12:00:00.000Z"
+keywords: ["direitos trabalhistas", "jornada de trabalho", "rescisão"]
 readingTime: 5
 featured: false
 published: true
+noIndex: false
 ---
 A legislação trabalhista estabelece direitos e deveres relacionados à prestação de serviços, à remuneração e às condições de trabalho. A aplicação das regras depende da realidade da relação mantida entre trabalhador e empregador.
 
