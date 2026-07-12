@@ -46,9 +46,14 @@ function normalizeDate(value, fallback = now.toISOString()) {
 }
 
 function localPath(route = '/') {
+  if (/^(?:https?:|mailto:|tel:|data:|blob:|#)/i.test(route)) return route
   const base = BASE_PATH === '/' ? '/' : BASE_PATH
-  const clean = route === '/' ? '' : route.replace(/^\/+|\/+$/g, '')
-  return `${base}${clean}${clean ? '/' : ''}`.replace(/\/{2,}/g, '/')
+  const pathname = String(route).split(/[?#]/)[0]
+  const suffix = String(route).slice(pathname.length)
+  const clean = pathname === '/' ? '' : pathname.replace(/^\/+|\/+$/g, '')
+  const isFile = /\.[a-z0-9]{1,12}$/i.test(clean)
+  const relative = `${clean}${clean && !isFile ? '/' : ''}`
+  return `${base}${relative}${suffix}`.replace(/([^:]\/)\/{2,}/g, '$1')
 }
 
 function breadcrumbItems(routePath, title) {
@@ -66,7 +71,7 @@ function breadcrumbHtml(items) {
   if (items.length <= 1) return ''
   return `<nav class="ssg-breadcrumb" aria-label="Navegação estrutural"><ol>${items.map((item, index) => {
     const current = index === items.length - 1
-    return `<li>${current ? `<span aria-current="page">${escapeHtml(item.name)}</span>` : `<a href="${localPath(item.path)}">${escapeHtml(item.name)}</a>`}</li>`
+    return `<li>${current ? `<span aria-current="page">${escapeHtml(item.name)}</span>` : `<a href="${escapeHtml(localPath(item.path))}">${escapeHtml(item.name)}</a>`}</li>`
   }).join('')}</ol></nav>`
 }
 
@@ -131,8 +136,8 @@ async function readArticles() {
       summary,
       author: data.author || SITE.author,
       category: data.category || 'Informações Gerais',
-      cover: data.cover || '/images/articles/default.svg',
-      coverAlt: data.coverAlt || data.cover_alt || `Ilustração do artigo ${data.title || slug}`,
+      cover: data.cover || '/images/articles/general.jpg',
+      coverAlt: data.coverAlt || data.cover_alt || `Fotografia ilustrativa do artigo ${data.title || slug}`,
       publishedAt,
       updatedAt,
       readingTime: Number(data.readingTime || data.reading_time) || 4,
@@ -152,6 +157,10 @@ function pageSpecificContent(route, articles) {
         <ul class="ssg-card-list">${practiceAreas.map((area) => `<li><a href="${localPath(`/areas-de-atuacao/${area.slug}`)}"><strong>${escapeHtml(area.title)}</strong><span>${escapeHtml(area.description)}</span></a></li>`).join('')}</ul>
       </section>
       <section><h2>Conteúdo jurídico</h2><ul class="ssg-link-list">${articles.slice(0, 4).map((article) => `<li><a href="${localPath(article.path)}">${escapeHtml(article.title)}</a></li>`).join('')}</ul><p><a href="${localPath('/artigos')}">Ver todos os artigos</a></p></section>`
+  }
+
+  if (route.path === '/sobre') {
+    return `<section><h2>Atendimento humano e organizado</h2><p>A proposta do escritório demonstrativo combina escuta cuidadosa, análise técnica, conferência documental e comunicação acessível.</p><p>As alternativas jurídicas são apresentadas com objetividade, sem promessa de resultado e com atenção aos riscos e às particularidades de cada situação.</p></section><section><h2>Missão, visão e valores</h2><ul><li>Orientação responsável e linguagem clara.</li><li>Ética, discrição e respeito às normas profissionais.</li><li>Organização do atendimento presencial e digital.</li></ul></section>`
   }
 
   if (route.path === '/areas-de-atuacao') {
@@ -175,33 +184,44 @@ function pageSpecificContent(route, articles) {
   }
 
   if (route.path === '/equipe') {
-    return `<section><h2>Profissionais demonstrativos</h2><article><h3>Dr. Rafael Almeida</h3><p>Advogado sócio fictício, apresentado para fins de portfólio.</p></article><article><h3>Dra. Marina Castro</h3><p>Advogada sócia fictícia, apresentada para fins de portfólio.</p></article></section>`
+    return `<section><h2>Profissionais demonstrativos</h2><article><h3>Dr. Rafael Almeida</h3><p>Advogado sócio fictício com atuação demonstrativa em Direito Civil, Empresarial e Contratos.</p></article><article><h3>Dra. Marina Castro</h3><p>Advogada sócia fictícia com atuação demonstrativa em Direito Previdenciário, Trabalhista e de Família.</p></article><p class="ssg-notice">Nomes, registros, formações, imagens e biografias são demonstrativos.</p></section>`
   }
 
   if (route.path === '/contato') {
-    return `<section><h2>Como funciona o contato</h2><p>O formulário direciona a mensagem para o WhatsApp e não armazena informações em banco de dados próprio.</p><address><p>${escapeHtml(SITE.address)}</p><p>${escapeHtml(SITE.phone)}</p><p><a href="mailto:${escapeHtml(SITE.email)}">${escapeHtml(SITE.email)}</a></p></address><p class="ssg-notice">Telefone, endereço e e-mail são dados fictícios utilizados apenas nesta demonstração.</p></section>`
+    const whatsappUrl = `https://wa.me/${String(SITE.whatsapp).replace(/\D/g, '')}`
+    return `<section><h2>Como funciona o contato</h2><p>O formulário interativo precisa de JavaScript e apenas prepara uma mensagem para o WhatsApp. Sem JavaScript, utilize os canais diretos abaixo.</p><address><p>${escapeHtml(SITE.address)}</p><p><a href="tel:${escapeHtml(String(SITE.phone).replace(/\D/g, ''))}">${escapeHtml(SITE.phone)}</a></p><p><a href="mailto:${escapeHtml(SITE.email)}">${escapeHtml(SITE.email)}</a></p><p><a href="${escapeHtml(whatsappUrl)}" rel="noopener noreferrer">Abrir o WhatsApp</a></p></address><p class="ssg-notice">Telefone, endereço e e-mail são dados fictícios utilizados apenas nesta demonstração.</p></section>`
   }
 
   if (route.path === '/politica-de-privacidade') {
-    return `<section><h2>Tratamento das informações</h2><p>Os dados preenchidos no formulário são utilizados apenas para montar a mensagem que será aberta no WhatsApp. Não envie informações sensíveis por este site demonstrativo.</p><h2>Serviços de terceiros</h2><p>Ao prosseguir para o WhatsApp, aplicam-se os termos e políticas do serviço externo.</p></section>`
+    return `<section><h2>Tratamento das informações</h2><p>Os dados preenchidos no formulário são utilizados apenas para montar a mensagem que será aberta no WhatsApp. Não envie informações sensíveis por este site demonstrativo.</p><h2>Serviços de terceiros</h2><p>Ao prosseguir para o WhatsApp, aplicam-se os termos e políticas do serviço externo.</p><h2>Projeto demonstrativo</h2><p>Antes de transformar este projeto em site real, a política deve ser revisada conforme os canais, ferramentas e tratamentos de dados efetivamente utilizados.</p></section>`
   }
 
   return `<section><h2>Atendimento institucional</h2><p>Escuta cuidadosa, análise documental, comunicação clara e atuação responsável, sem promessas de resultado.</p><p><a href="${localPath('/areas-de-atuacao')}">Conheça as áreas de atuação</a> ou <a href="${localPath('/contato')}">acesse os canais de contato</a>.</p></section>`
 }
 
-function staticShell({ route, articles, article }) {
+function navigationHtml() {
+  return `<nav aria-label="Menu principal"><a href="${localPath('/sobre')}">O Escritório</a><a href="${localPath('/areas-de-atuacao')}">Áreas de atuação</a><a href="${localPath('/equipe')}">Equipe</a><a href="${localPath('/artigos')}">Artigos</a><a href="${localPath('/contato')}">Contato</a></nav>`
+}
+
+function staticShell({ route, articles, article, notFound = false }) {
   const title = article?.title || route.heading
   const routePath = article?.path || route.path
   const crumbs = breadcrumbItems(routePath, title)
-  const mainContent = article
-    ? `<article class="ssg-article"><header><p class="ssg-eyebrow">${escapeHtml(article.category)}</p><h1>${escapeHtml(article.title)}</h1><p>${escapeHtml(article.summary)}</p><p><small>Por ${escapeHtml(article.author)} · <time datetime="${article.publishedAt}">${new Intl.DateTimeFormat('pt-BR').format(new Date(article.publishedAt))}</time> · ${article.readingTime} min de leitura</small></p></header><img src="${escapeHtml(localPath(article.cover))}" alt="${escapeHtml(article.coverAlt)}" width="1200" height="630" decoding="async"><div class="ssg-prose">${article.bodyHtml}</div><aside class="ssg-notice"><strong>Aviso</strong><p>Conteúdo informativo. Não substitui análise jurídica individualizada.</p></aside><p><a href="${localPath('/artigos')}">Voltar aos artigos</a></p></article>`
-    : `<header class="ssg-page-header"><p class="ssg-eyebrow">Almeida &amp; Castro Advocacia</p><h1>${escapeHtml(route.heading)}</h1><p>${escapeHtml(route.intro)}</p></header>${pageSpecificContent(route, articles)}`
+
+  let mainContent
+  if (notFound) {
+    mainContent = `<header class="ssg-page-header"><p class="ssg-eyebrow">Almeida &amp; Castro Advocacia</p><h1>${escapeHtml(route.heading)}</h1><p>${escapeHtml(route.intro)}</p></header><section><h2>Continue navegando</h2><p><a href="${localPath('/')}">Ir para a página inicial</a></p><p><a href="${localPath('/areas-de-atuacao')}">Conhecer as áreas de atuação</a> · <a href="${localPath('/artigos')}">Ler os artigos</a> · <a href="${localPath('/contato')}">Entrar em contato</a></p></section>`
+  } else if (article) {
+    mainContent = `<article class="ssg-article"><header><p class="ssg-eyebrow">${escapeHtml(article.category)}</p><h1>${escapeHtml(article.title)}</h1><p>${escapeHtml(article.summary)}</p><p><small>Por ${escapeHtml(article.author)} · <time datetime="${article.publishedAt}">${new Intl.DateTimeFormat('pt-BR').format(new Date(article.publishedAt))}</time> · ${article.readingTime} min de leitura</small></p></header><img src="${escapeHtml(localPath(article.cover))}" alt="${escapeHtml(article.coverAlt)}" width="1200" height="630" decoding="async"><div class="ssg-prose">${article.bodyHtml}</div><aside class="ssg-notice"><strong>Aviso</strong><p>Conteúdo informativo. Não substitui análise jurídica individualizada.</p></aside><p><a href="${localPath('/artigos')}">Voltar aos artigos</a></p></article>`
+  } else {
+    mainContent = `<header class="ssg-page-header"><p class="ssg-eyebrow">Almeida &amp; Castro Advocacia</p><h1>${escapeHtml(route.heading)}</h1><p>${escapeHtml(route.intro)}</p></header>${pageSpecificContent(route, articles)}`
+  }
 
   return `<div class="ssg-shell" data-prerendered="true">
     <a class="ssg-skip" href="#main-content">Pular para o conteúdo</a>
-    <header class="ssg-header"><div><a href="${localPath('/')}"><strong>Almeida &amp; Castro</strong><span>Advocacia</span></a><nav aria-label="Menu principal"><a href="${localPath('/sobre')}">O Escritório</a><a href="${localPath('/areas-de-atuacao')}">Áreas de atuação</a><a href="${localPath('/equipe')}">Equipe</a><a href="${localPath('/artigos')}">Artigos</a><a href="${localPath('/contato')}">Contato</a></nav></div></header>
+    <header class="ssg-header"><div><a href="${localPath('/')}"><strong>Almeida &amp; Castro</strong><span>Advocacia</span></a>${navigationHtml()}</div></header>
     <main id="main-content" class="ssg-main">${breadcrumbHtml(crumbs)}${mainContent}</main>
-    <footer class="ssg-footer"><address>${escapeHtml(SITE.address)} · ${escapeHtml(SITE.phone)}</address><p>Conteúdo de caráter informativo, sem promessa de resultado.</p>${IS_DEMO ? '<p><strong>Projeto demonstrativo:</strong> escritório, profissionais e dados de contato são fictícios.</p>' : ''}</footer>
+    <footer class="ssg-footer"><address>${escapeHtml(SITE.address)} · ${escapeHtml(SITE.phone)}</address><p><a href="${localPath('/politica-de-privacidade')}">Política de privacidade</a></p><p>Conteúdo de caráter informativo, sem promessa de resultado.</p>${IS_DEMO ? '<p><strong>Projeto demonstrativo:</strong> escritório, profissionais e dados de contato são fictícios.</p>' : ''}</footer>
   </div>`
 }
 
@@ -226,7 +246,7 @@ function buildHead({ title, description, routePath, image, imageAlt, type = 'web
     `<meta property="og:image:alt" content="${escapeHtml(imageAlt || title)}">`,
     `<meta property="og:site_name" content="${escapeHtml(SITE.name)}">`,
     `<meta property="og:locale" content="${SITE.locale}">`,
-    `<meta name="twitter:card" content="summary_large_image">`,
+    '<meta name="twitter:card" content="summary_large_image">',
     `<meta name="twitter:title" content="${escapeHtml(title)}">`,
     `<meta name="twitter:description" content="${escapeHtml(description)}">`,
     `<meta name="twitter:image" content="${escapeHtml(absoluteImage)}">`,
@@ -245,7 +265,7 @@ function injectHtml(baseHtml, head, body) {
     .replace(/<link\s+rel=["']canonical["'][^>]*>/gi, '')
     .replace(/<script[^>]+type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '')
   html = html.replace('</head>', `${head}\n</head>`)
-  html = html.replace(/<div\s+id=["']root["']\s*>[\s\S]*?<\/div>/i, `<div id="root">${body}</div>`)
+  html = html.replace(/<div\s+id=["']root["'][^>]*>\s*<\/div>/i, `<div id="root" data-prerendered="true">${body}</div>`)
   return html
 }
 
@@ -308,8 +328,8 @@ const notFoundRoute = {
   heading: 'Página não encontrada',
   intro: 'O endereço informado pode estar incorreto ou a página pode ter sido removida.',
 }
-const notFoundBody = `<div class="ssg-shell" data-prerendered="true"><main id="main-content" class="ssg-main"><h1>Página não encontrada</h1><p>O endereço informado pode estar incorreto ou a página pode ter sido removida.</p><p><a href="${localPath('/')}">Ir para a página inicial</a></p><p><a href="${localPath('/areas-de-atuacao')}">Conhecer as áreas de atuação</a> · <a href="${localPath('/contato')}">Entrar em contato</a></p></main></div>`
 const notFoundHead = buildHead({ title: notFoundRoute.title, description: notFoundRoute.description, routePath: '/404', noIndex: true })
-await fs.writeFile(path.join(distDir, '404.html'), injectHtml(baseHtml, notFoundHead, notFoundBody), 'utf8')
+const notFoundOutput = injectHtml(baseHtml, notFoundHead, staticShell({ route: notFoundRoute, articles, notFound: true }))
+await fs.writeFile(path.join(distDir, '404.html'), notFoundOutput, 'utf8')
 
 console.log(`Exportação estática concluída: ${routes.length} páginas públicas e página 404.`)
