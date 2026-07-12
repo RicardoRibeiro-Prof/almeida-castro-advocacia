@@ -11,7 +11,7 @@ import { formatDate } from '../utils/format'
 import { sanitizeHtml } from '../utils/sanitize'
 import NotFound from './NotFound'
 
-const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}images/articles/default.svg`
+const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}images/articles/general.jpg`
 
 export default function ArticleDetail() {
   const { slug } = useParams()
@@ -114,7 +114,7 @@ export default function ArticleDetail() {
         <div className="container article-cover">
           <img
             src={article.cover_image_url || FALLBACK_IMAGE}
-            alt={article.cover_alt || `Imagem de capa do artigo ${article.title}`}
+            alt={article.cover_alt || `Fotografia ilustrativa do artigo ${article.title}`}
             width="1200"
             height="630"
             decoding="async"
