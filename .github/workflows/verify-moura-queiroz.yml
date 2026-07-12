@@ -1,5 +1,5 @@
 name: Verificar projeto Moura e Queiroz
-# segunda execução após correção do sitemap
+# terceira execução com auditoria da publicação
 
 on:
   push:
@@ -20,7 +20,7 @@ env:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
@@ -37,8 +37,15 @@ jobs:
           if [ "$CI_CODE" -eq 0 ]; then npm run lint:imports >> moura-build.log 2>&1; LINT_CODE=$?; else LINT_CODE=99; fi
           if [ "$CI_CODE" -eq 0 ] && [ "$LINT_CODE" -eq 0 ]; then npm run build >> moura-build.log 2>&1; BUILD_CODE=$?; else BUILD_CODE=99; fi
 
+          DEPLOY_CODE=99
+          if [ "$BUILD_CODE" -eq 0 ]; then
+            sleep 90
+            AUDIT_SITE_URL='https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/moura-queiroz-advocacia' npm run audit:moura >> moura-build.log 2>&1
+            DEPLOY_CODE=$?
+          fi
+
           RESULT='SUCESSO'
-          if [ "$CI_CODE" -ne 0 ] || [ "$LINT_CODE" -ne 0 ] || [ "$BUILD_CODE" -ne 0 ]; then RESULT='FALHA'; fi
+          if [ "$CI_CODE" -ne 0 ] || [ "$LINT_CODE" -ne 0 ] || [ "$BUILD_CODE" -ne 0 ] || [ "$DEPLOY_CODE" -ne 0 ]; then RESULT='FALHA'; fi
 
           PAGES=$(find dist/moura-queiroz-advocacia -type f -name index.html 2>/dev/null | wc -l | tr -d ' ')
           ARTICLES=$(find dist/moura-queiroz-advocacia/artigos -mindepth 2 -type f -name index.html 2>/dev/null | wc -l | tr -d ' ')
@@ -53,20 +60,22 @@ jobs:
             echo "- Commit verificado: $GITHUB_SHA"
             echo "- npm ci: código $CI_CODE"
             echo "- lint:imports: código $LINT_CODE"
-            echo "- build e auditorias: código $BUILD_CODE"
+            echo "- build e auditorias locais: código $BUILD_CODE"
+            echo "- auditoria da publicação: código $DEPLOY_CODE"
             echo "- páginas index.html: $PAGES"
             echo "- artigos pré-renderizados: $ARTICLES"
             echo "- canonical inicial: $HOME_CANONICAL"
+            echo "- URL publicada: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/moura-queiroz-advocacia/"
             echo
             echo '```text'
-            tail -n 260 moura-build.log
+            tail -n 320 moura-build.log
             echo '```'
           } > MOURA-QUEIROZ-VERIFICATION.md
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add MOURA-QUEIROZ-VERIFICATION.md
-          git commit -m 'Registra verificação do projeto Moura e Queiroz' || true
+          git commit -m 'Registra verificação publicada de Moura e Queiroz' || true
           git push
 
           if [ "$RESULT" = 'FALHA' ]; then exit 1; fi
