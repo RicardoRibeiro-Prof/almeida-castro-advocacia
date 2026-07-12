@@ -3,12 +3,17 @@ title: "Inventário e partilha: como organizar os documentos"
 slug: "inventario-e-partilha-como-organizar-os-documentos"
 category: "Direito de Família"
 summary: "Veja quais informações e documentos normalmente ajudam a organizar o inventário e a partilha de bens."
-cover: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=86"
+excerpt: "Documentos pessoais, patrimoniais e informações que ajudam a organizar as etapas do inventário e da partilha."
+cover: "/images/articles/default.svg"
+coverAlt: "Ilustração institucional sobre inventário e partilha de bens"
 author: "Dra. Marina Castro"
 date: "2026-06-18T12:00:00.000Z"
+updatedAt: "2026-07-12T12:00:00.000Z"
+keywords: ["inventário", "partilha de bens", "direito de família"]
 readingTime: 5
 featured: false
 published: true
+noIndex: false
 ---
 O inventário é o procedimento utilizado para identificar bens, direitos, dívidas e herdeiros, permitindo a posterior partilha do patrimônio deixado pela pessoa falecida.
 
