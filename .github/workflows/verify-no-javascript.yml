@@ -1,0 +1,131 @@
+name: Verificar site sem JavaScript
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-no-javascript.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  no-js-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20.19.5
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Instalar Chromium
+        run: |
+          npm install --no-save --package-lock=false playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Aguardar publicação
+        run: sleep 75
+      - name: Auditar conteúdo com JavaScript desativado
+        shell: bash
+        run: |
+          set +e
+          node --input-type=module <<'NODE' > no-js-audit.log 2>&1
+          import { chromium } from 'playwright'
+
+          const base = 'https://ricardoribeiro-prof.github.io/almeida-castro-advocacia'
+          const routes = [
+            '/',
+            '/sobre/',
+            '/areas-de-atuacao/',
+            '/areas-de-atuacao/direito-previdenciario/',
+            '/equipe/',
+            '/artigos/',
+            '/contato/',
+            '/politica-de-privacidade/',
+          ]
+          const failures = []
+          const browser = await chromium.launch({ headless: true })
+          const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } })
+
+          async function audit(route, article = false) {
+            const page = await context.newPage()
+            const response = await page.goto(`${base}${route}`, { waitUntil: 'domcontentloaded', timeout: 60000 })
+            const status = response?.status() || 0
+            const h1 = (await page.locator('h1').first().textContent().catch(() => ''))?.trim() || ''
+            const text = (await page.locator('body').innerText().catch(() => '')).trim()
+            const header = await page.locator('header').count()
+            const nav = await page.locator('nav').count()
+            const main = await page.locator('main').count()
+            const footer = await page.locator('footer').count()
+            const links = await page.locator('a[href]').count()
+            const prerendered = await page.locator('[data-prerendered="true"]').count()
+            const notices = await page.locator('noscript').count()
+            const errors = []
+
+            if (status !== 200) errors.push(`HTTP ${status}`)
+            if (!h1) errors.push('H1 ausente')
+            if (text.length < (article ? 700 : 250)) errors.push(`texto insuficiente (${text.length})`)
+            if (!header || !nav || !main || !footer) errors.push('cabeçalho, menu, main ou rodapé ausente')
+            if (links < 4) errors.push(`links insuficientes (${links})`)
+            if (!prerendered) errors.push('marcador pré-renderizado ausente')
+            if (!notices) errors.push('aviso noscript ausente')
+            if (route === '/contato/') {
+              const alternatives = await page.locator('a[href^="mailto:"], a[href^="tel:"], a[href^="https://wa.me/"]').count()
+              if (alternatives < 2) errors.push('alternativas diretas do contato ausentes')
+            }
+            if (article && !(await page.locator('article').count())) errors.push('elemento article ausente')
+
+            if (errors.length) failures.push(`${route}: ${errors.join(' | ')}`)
+            console.log(`${route}: HTTP ${status}, H1=${JSON.stringify(h1)}, texto=${text.length}, links=${links}, erros=${errors.length}`)
+            const html = await page.content()
+            await page.close()
+            return html
+          }
+
+          let articlesHtml = ''
+          for (const route of routes) {
+            const html = await audit(route)
+            if (route === '/artigos/') articlesHtml = html
+          }
+
+          const articleMatch = articlesHtml.match(/href=["']([^"']*\/artigos\/[^"'/?#]+\/)["']/i)
+          if (!articleMatch) {
+            failures.push('Artigo publicado não localizado na página de artigos.')
+          } else {
+            const articleUrl = new URL(articleMatch[1], `${base}/`)
+            const basePath = new URL(`${base}/`).pathname.replace(/\/$/, '')
+            const articleRoute = articleUrl.pathname.slice(basePath.length) || '/'
+            await audit(articleRoute.startsWith('/') ? articleRoute : `/${articleRoute}`, true)
+          }
+
+          await browser.close()
+          if (failures.length) {
+            console.error(`\nFalhas encontradas (${failures.length}):`)
+            failures.forEach((failure) => console.error(`- ${failure}`))
+            process.exit(1)
+          }
+          console.log('\nAuditoria sem JavaScript concluída com conteúdo, navegação, links, rodapé, contato e artigo disponíveis.')
+          NODE
+          CODE=$?
+          RESULT='SUCESSO'
+          if [ "$CODE" -ne 0 ]; then RESULT='FALHA'; fi
+          {
+            echo '# Verificação sem JavaScript'
+            echo
+            echo "Resultado: **$RESULT**"
+            echo
+            echo "- Data UTC: $(date -u '+%Y-%m-%d %H:%M:%S')"
+            echo "- Commit verificado: $GITHUB_SHA"
+            echo "- Auditoria Chromium com JavaScript desativado: código $CODE"
+            echo
+            echo '```text'
+            cat no-js-audit.log
+            echo '```'
+          } > NO-JS-VERIFICATION.md
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add NO-JS-VERIFICATION.md
+          git commit -m 'Registra verificação sem JavaScript' || true
+          git push
+          if [ "$CODE" -ne 0 ]; then exit 1; fi
