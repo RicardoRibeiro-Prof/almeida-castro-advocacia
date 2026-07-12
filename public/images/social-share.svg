@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Almeida &amp; Castro Advocacia</title>
+  <desc id="desc">Imagem institucional demonstrativa em azul-marinho e dourado.</desc>
+  <rect width="1200" height="630" fill="#081a2e"/>
+  <rect y="0" width="1200" height="18" fill="#bf9650"/>
+  <rect x="70" y="70" width="1060" height="490" rx="12" fill="none" stroke="#bf9650" stroke-width="3"/>
+  <text x="110" y="245" fill="#ffffff" font-family="Georgia, serif" font-size="78" font-weight="700">Almeida &amp; Castro</text>
+  <text x="112" y="310" fill="#bf9650" font-family="Arial, sans-serif" font-size="34" letter-spacing="8">ADVOCACIA</text>
+  <text x="112" y="405" fill="#e1e8f0" font-family="Arial, sans-serif" font-size="34">Atuação jurídica ética, clara e responsável.</text>
+  <text x="112" y="470" fill="#b4c2d1" font-family="Arial, sans-serif" font-size="26">Projeto demonstrativo • São Raimundo Nonato – PI</text>
+</svg>
