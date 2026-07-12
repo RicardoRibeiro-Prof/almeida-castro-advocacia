@@ -3,12 +3,17 @@ title: "O que deve ser observado antes de assinar um contrato"
 slug: "o-que-deve-ser-observado-antes-de-assinar-um-contrato"
 category: "Direito Civil"
 summary: "Uma leitura cuidadosa pode esclarecer obrigações, prazos, garantias, multas e hipóteses de encerramento do contrato."
-cover: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=1400&q=86"
+excerpt: "Pontos essenciais para conferir obrigações, prazos, multas, garantias e formas de encerramento antes de assinar um contrato."
+cover: "/images/articles/default.svg"
+coverAlt: "Ilustração institucional sobre análise e assinatura de contratos"
 author: "Dr. Rafael Almeida"
 date: "2026-07-01T12:00:00.000Z"
+updatedAt: "2026-07-12T12:00:00.000Z"
+keywords: ["contratos", "revisão contratual", "direito civil"]
 readingTime: 5
 featured: true
 published: true
+noIndex: false
 ---
 Assinar um contrato significa assumir obrigações. Por isso, o documento deve ser lido com atenção e compreendido antes da assinatura, especialmente quando envolve patrimônio, prestação continuada de serviços ou compromissos de longo prazo.
 
