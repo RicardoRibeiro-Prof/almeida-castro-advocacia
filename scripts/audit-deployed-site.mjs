@@ -74,7 +74,7 @@ async function fetchWithRetry(url, options = {}) {
     try {
       const response = await fetch(url, {
         redirect: 'follow',
-        headers: { 'User-Agent': 'AlmeidaCastroDeploymentAudit/2.0' },
+        headers: { 'User-Agent': 'AlmeidaCastroDeploymentAudit/2.1' },
         ...options,
       })
       if (response.ok || response.status === 404) return response
@@ -89,12 +89,32 @@ async function fetchWithRetry(url, options = {}) {
 
 function collectAssetUrls(html, pageUrl) {
   const references = []
+  const acceptedLinkRels = new Set([
+    'stylesheet',
+    'icon',
+    'shortcut icon',
+    'apple-touch-icon',
+    'manifest',
+    'preload',
+    'modulepreload',
+  ])
 
-  for (const match of html.matchAll(/<script[^>]+src=["']([^"']+)["']/gi)) references.push(match[1])
-  for (const match of html.matchAll(/<img[^>]+src=["']([^"']+)["']/gi)) references.push(match[1])
-  for (const match of html.matchAll(/<link[^>]+(?:rel=["'](?:stylesheet|icon|manifest|apple-touch-icon|preload)["'][^>]+href|href=["']([^"']+)["'][^>]+rel=["'](?:stylesheet|icon|manifest|apple-touch-icon|preload)["'])/gi)) {
-    const href = match[1] || match[0].match(/href=["']([^"']+)["']/i)?.[1]
-    if (href) references.push(href)
+  for (const match of html.matchAll(/<script\b[^>]*src=["']([^"']+)["'][^>]*>/gi)) references.push(match[1])
+  for (const match of html.matchAll(/<img\b[^>]*src=["']([^"']+)["'][^>]*>/gi)) references.push(match[1])
+  for (const match of html.matchAll(/<source\b[^>]*src=["']([^"']+)["'][^>]*>/gi)) references.push(match[1])
+
+  for (const match of html.matchAll(/<(?:img|source)\b[^>]*srcset=["']([^"']+)["'][^>]*>/gi)) {
+    for (const candidate of match[1].split(',')) {
+      const value = candidate.trim().split(/\s+/)[0]
+      if (value) references.push(value)
+    }
+  }
+
+  for (const match of html.matchAll(/<link\b[^>]*>/gi)) {
+    const tag = match[0]
+    const href = tag.match(/href=["']([^"']+)["']/i)?.[1]
+    const rel = tag.match(/rel=["']([^"']+)["']/i)?.[1]?.toLowerCase().trim()
+    if (href && rel && acceptedLinkRels.has(rel)) references.push(href)
   }
 
   for (const property of ['og:image', 'twitter:image']) {
