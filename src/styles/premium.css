@@ -17,6 +17,7 @@ h2,
 .brand__text strong,
 .article-card h3,
 .team-card h3,
+.principles-card h2,
 .principles-card h3 {
   font-family: "Playfair Display", Georgia, serif;
 }
@@ -148,6 +149,24 @@ h2,
     linear-gradient(145deg, #081a2e, #102f50);
 }
 .principles-card--premium > svg { color: var(--gold-500); }
+.principles-card--premium .principles-card__number { color: var(--gold-300); }
+.principles-card--premium h2,
+.principles-card--premium h3 {
+  margin: 15px 0;
+  color: #ffffff;
+  font-size: clamp(1.85rem, 3vw, 2.45rem);
+  font-weight: 600;
+  line-height: 1.18;
+}
+.principles-card--premium p {
+  color: rgba(255, 255, 255, 0.84);
+}
+.principles-card--premium .text-link--light {
+  color: #ffffff;
+}
+.principles-card--premium .text-link--light:hover {
+  color: var(--gold-300);
+}
 
 .team-card,
 .article-card { border-color: rgba(15, 39, 68, 0.08); box-shadow: var(--shadow-soft); }
@@ -195,4 +214,6 @@ h2,
   .hero__visual-card { right: 12px; bottom: -26px; width: calc(100% - 24px); }
   .institutional-strip article { padding: 20px 10px; }
   .team-card__image { height: 350px; }
+  .principles-card--premium h2,
+  .principles-card--premium h3 { font-size: 2rem; }
 }
