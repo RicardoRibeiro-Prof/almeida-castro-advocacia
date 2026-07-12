@@ -8,8 +8,11 @@ import './styles/brand-logo.css'
 import './styles/accessibility.css'
 
 const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+const rootElement = document.getElementById('root')
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+if (rootElement.hasChildNodes()) rootElement.replaceChildren()
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <BrowserRouter basename={routerBase}>
       <App />
