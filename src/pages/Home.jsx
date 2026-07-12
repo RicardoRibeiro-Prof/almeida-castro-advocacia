@@ -23,8 +23,8 @@ import { teamMembers } from '../data/team'
 import { getRecentPublishedArticles } from '../services/articleService'
 import { getWhatsAppUrl } from '../utils/constants'
 
-const HERO_IMAGE = `${import.meta.env.BASE_URL}images/hero-office.svg`
-const ABOUT_IMAGE = `${import.meta.env.BASE_URL}images/hero-office.svg`
+const HERO_IMAGE = `${import.meta.env.BASE_URL}images/hero-office.jpg`
+const ABOUT_IMAGE = `${import.meta.env.BASE_URL}images/about-office.jpg`
 
 const differences = [
   'Atendimento personalizado e respeitoso',
@@ -88,9 +88,9 @@ export default function Home() {
           <div className="hero__visual hero__visual--photo">
             <img
               src={HERO_IMAGE}
-              alt="Escritório jurídico moderno em tons de azul-marinho, madeira e dourado"
-              width="800"
-              height="600"
+              alt="Sala de reunião moderna em escritório jurídico"
+              width="1600"
+              height="1100"
               decoding="async"
               fetchPriority="high"
             />
@@ -118,9 +118,9 @@ export default function Home() {
           <div className="image-frame image-frame--office image-frame--premium">
             <img
               src={ABOUT_IMAGE}
-              alt="Ambiente jurídico sofisticado preparado para atendimento presencial e digital"
-              width="800"
-              height="600"
+              alt="Ambiente contemporâneo de escritório para atendimento"
+              width="1500"
+              height="1100"
               loading="lazy"
               decoding="async"
             />
