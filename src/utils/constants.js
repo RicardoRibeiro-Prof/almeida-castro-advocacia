@@ -1,15 +1,17 @@
-export const SITE_NAME = 'Almeida & Castro Advocacia'
-export const SITE_SHORT_NAME = 'Almeida & Castro'
-export const SITE_CITY = 'São Raimundo Nonato – Piauí'
+import SITE from '../config/site'
+
+export const SITE_NAME = SITE.name
+export const SITE_SHORT_NAME = SITE.shortName
+export const SITE_CITY = `${SITE.city} – ${SITE.stateName}`
 
 export const CONTACT_INFO = {
-  phone: '(89) 99999-9999',
-  whatsappNumber: '5589999999999',
-  email: 'contato@almeidaecastro.adv.br',
-  address: 'Av. Professor João Menezes, 250, Centro, São Raimundo Nonato – PI',
-  hours: 'Segunda a sexta, das 8h às 12h e das 14h às 18h',
-  instagram: 'https://www.instagram.com/',
-  linkedin: 'https://www.linkedin.com/',
+  phone: SITE.phone,
+  whatsappNumber: SITE.whatsapp,
+  email: SITE.email,
+  address: SITE.address,
+  hours: SITE.openingHours,
+  instagram: SITE.social.instagram,
+  linkedin: SITE.social.linkedin,
 }
 
 export const WHATSAPP_MESSAGE =
@@ -29,4 +31,4 @@ export const ARTICLE_STATUS_LABELS = {
 }
 
 export const MAX_IMAGE_SIZE = 5 * 1024 * 1024
-export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+export const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif']
