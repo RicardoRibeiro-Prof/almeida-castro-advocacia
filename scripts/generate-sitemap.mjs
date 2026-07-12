@@ -1,74 +1,70 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { load } from 'js-yaml'
+import { ALLOW_INDEXING, IS_DEMO, SITE_URL, buildCanonicalUrl } from '../src/config/site.js'
+import { allStaticRoutes } from './site-routes.mjs'
 
 const rootDir = process.cwd()
-const publicDir = path.join(rootDir, 'public')
+const outputDir = path.join(rootDir, 'dist')
 const contentDir = path.join(rootDir, 'src', 'content', 'articles')
-const siteUrl = (process.env.VITE_SITE_URL || 'https://seu-dominio.com.br').replace(/\/$/, '')
-
-const staticRoutes = [
-  '/',
-  '/sobre',
-  '/areas-de-atuacao',
-  '/areas-de-atuacao/direito-civil',
-  '/areas-de-atuacao/direito-previdenciario',
-  '/areas-de-atuacao/direito-trabalhista',
-  '/areas-de-atuacao/direito-de-familia',
-  '/areas-de-atuacao/direito-do-consumidor',
-  '/areas-de-atuacao/direito-empresarial',
-  '/equipe',
-  '/artigos',
-  '/contato',
-  '/politica-de-privacidade',
-]
+const now = new Date()
 
 function readFrontmatter(raw = '') {
   const match = raw.match(/^---\s*\n([\s\S]*?)\n---/)
   return match ? load(match[1]) || {} : {}
 }
 
-let articleRoutes = []
-
-try {
-  const files = (await fs.readdir(contentDir)).filter((file) => file.endsWith('.md'))
-  const entries = await Promise.all(
-    files.map(async (file) => {
-      const raw = await fs.readFile(path.join(contentDir, file), 'utf8')
-      const data = readFrontmatter(raw)
-      const date = data.date ? new Date(data.date) : null
-      const isFuture = date && !Number.isNaN(date.getTime()) && date > new Date()
-
-      if (data.published === false || isFuture) return null
-
-      return {
-        path: `/artigos/${data.slug || file.replace(/\.md$/, '')}`,
-        lastmod: date && !Number.isNaN(date.getTime()) ? date.toISOString() : undefined,
-      }
-    }),
-  )
-  articleRoutes = entries.filter(Boolean)
-} catch (error) {
-  console.warn('Sitemap: não foi possível ler os artigos locais.', error.message)
+function xmlEscape(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
 }
 
-const urls = [
-  ...staticRoutes.map((route) => ({ path: route })),
-  ...articleRoutes,
-]
+if (SITE_URL.includes('seu-dominio.com.br')) {
+  throw new Error('Sitemap bloqueado: configure VITE_SITE_URL com a URL pública correta.')
+}
+
+let articleRoutes = []
+try {
+  const files = (await fs.readdir(contentDir)).filter((file) => file.endsWith('.md'))
+  const entries = await Promise.all(files.map(async (file) => {
+    const raw = await fs.readFile(path.join(contentDir, file), 'utf8')
+    const data = readFrontmatter(raw)
+    const publishedAt = data.date || data.published_at
+    const publishedDate = publishedAt ? new Date(publishedAt) : null
+    const isFuture = publishedDate && !Number.isNaN(publishedDate.getTime()) && publishedDate > now
+    if (data.published === false || data.noIndex === true || data.no_index === true || isFuture) return null
+    const updatedAt = data.updatedAt || data.updated_at || publishedAt
+    const updatedDate = updatedAt ? new Date(updatedAt) : null
+    return {
+      path: `/artigos/${data.slug || file.replace(/\.md$/, '')}`,
+      lastmod: updatedDate && !Number.isNaN(updatedDate.getTime()) ? updatedDate.toISOString() : undefined,
+    }
+  }))
+  articleRoutes = entries.filter(Boolean)
+} catch (error) {
+  throw new Error(`Não foi possível ler os artigos para o sitemap: ${error.message}`)
+}
+
+const indexable = ALLOW_INDEXING && !IS_DEMO
+const urls = indexable
+  ? [...allStaticRoutes.map((route) => ({ path: route.path })), ...articleRoutes]
+  : []
+
+if (indexable && urls.length === 0) throw new Error('Sitemap vazio em ambiente com indexação habilitada.')
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
-  .map(
-    ({ path: routePath, lastmod }) => `  <url>
-    <loc>${siteUrl}${routePath}</loc>${lastmod ? `\n    <lastmod>${lastmod}</lastmod>` : ''}
-  </url>`,
-  )
-  .join('\n')}
+${urls.map(({ path: routePath, lastmod }) => `  <url>
+    <loc>${xmlEscape(buildCanonicalUrl(routePath))}</loc>${lastmod ? `
+    <lastmod>${lastmod}</lastmod>` : ''}
+  </url>`).join('\n')}
 </urlset>
 `
 
-await fs.mkdir(publicDir, { recursive: true })
-await fs.writeFile(path.join(publicDir, 'sitemap.xml'), xml, 'utf8')
-console.log(`Sitemap gerado com ${urls.length} URLs.`)
+await fs.mkdir(outputDir, { recursive: true })
+await fs.writeFile(path.join(outputDir, 'sitemap.xml'), xml, 'utf8')
+console.log(indexable ? `Sitemap gerado com ${urls.length} URLs.` : 'Sitemap demonstrativo gerado sem URLs indexáveis.')
