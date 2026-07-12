@@ -2,11 +2,14 @@
 
 Resultado: **SUCESSO**
 
-- Data UTC: 2026-07-12 16:19:52
-- Commit verificado: `02b734cb83bbd188e42109443931da90ae5831b7`
+- Data UTC: 2026-07-12 21:11:19
+- Commit verificado: `a46edc0a71aeed1af7368f2710cced96b31cfd1e`
 - Auditoria HTTP: código `0`
 - Arquivos `index.html` gerados: `22`
 - Páginas públicas pré-renderizadas: `21`, além de `404.html`
+- Artigos pré-renderizados: `8`
+- Páginas conferidas por HTTP: `14`
+- Assets conferidos por HTTP: `16`
 - Canonical inicial: `https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/`
 - Canonical interno: `https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/sobre/`
 - URLs no sitemap demonstrativo: `0`
@@ -45,8 +48,9 @@ Allow: /
 > node scripts/audit-deployed-site.mjs
 
 Auditoria HTTP concluída com sucesso.
-- 8 páginas institucionais responderam com HTML próprio
-- 5 arquivos CSS/JavaScript responderam com sucesso
-- um artigo publicado e a página 404 foram conferidos
-- canonicals, títulos, H1, noindex, pré-renderização, robots e sitemap conferidos
+- 14 páginas públicas responderam com HTML próprio
+- 16 assets, incluindo CSS, JavaScript, imagens, ícones, manifest e painel, responderam com sucesso
+- títulos, descriptions, robots, googlebot, canonicals, Open Graph, Twitter Cards, H1 e conteúdo pré-renderizado conferidos
+- um artigo publicado, página 404, robots.txt e sitemap.xml conferidos
+- modo: demonstração/não indexável
 ```
