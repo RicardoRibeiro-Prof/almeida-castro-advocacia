@@ -1,4 +1,5 @@
 name: Verificar projeto Moura e Queiroz
+# segunda execução após correção do sitemap
 
 on:
   push:
