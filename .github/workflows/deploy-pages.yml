@@ -1,0 +1,106 @@
+name: Publicar site pré-renderizado
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+env:
+  VITE_SITE_URL: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia
+  VITE_BASE_PATH: /almeida-castro-advocacia/
+  VITE_IS_DEMO: 'true'
+  VITE_ALLOW_INDEXING: 'false'
+  VITE_PRODUCTION_DATA_CONFIRMED: 'false'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v6
+
+      - name: Configurar o GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.19.5
+          cache: npm
+
+      - name: Instalar dependências reproduzíveis
+        run: npm ci --no-audit --no-fund
+
+      - name: Validar importações
+        run: npm run lint:imports
+
+      - name: Construir, pré-renderizar e auditar
+        run: npm run build
+
+      - name: Confirmar páginas HTML reais
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/index.html
+          test -f dist/sobre/index.html
+          test -f dist/areas-de-atuacao/index.html
+          test -f dist/areas-de-atuacao/direito-previdenciario/index.html
+          test -f dist/equipe/index.html
+          test -f dist/artigos/index.html
+          test -f dist/contato/index.html
+          test -f dist/politica-de-privacidade/index.html
+          test -f dist/404.html
+          grep -q 'data-prerendered="true"' dist/index.html
+          grep -q 'data-prerendered="true"' dist/sobre/index.html
+          grep -q 'data-prerendered="true"' dist/404.html
+
+      - name: Enviar somente a pasta dist
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 10
+    steps:
+      - name: Publicar artifact no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  audit-published:
+    runs-on: ubuntu-latest
+    needs: deploy
+    timeout-minutes: 15
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v6
+
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.19.5
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci --no-audit --no-fund
+
+      - name: Auditar o site publicado por HTTP
+        env:
+          AUDIT_SITE_URL: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia
+          AUDIT_ATTEMPTS: '12'
+          AUDIT_DELAY_MS: '5000'
+        run: npm run audit:deployed
