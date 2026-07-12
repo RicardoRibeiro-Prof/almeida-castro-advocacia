@@ -28,7 +28,7 @@ export default function Team() {
           <div className="team-grid team-grid--detailed">
             {teamMembers.map((member) => <TeamCard key={member.name} member={member} detailed />)}
           </div>
-          <p className="team-image-note" role="note">Os nomes, registros, formações, imagens e biografias desta equipe são fictícios e integram somente a demonstração do projeto.</p>
+          <p className="team-image-note" role="note">Os nomes, registros, formações e biografias são fictícios. As fotografias são meramente ilustrativas e não representam os profissionais descritos.</p>
         </div>
       </section>
       <section className="section section--soft">
