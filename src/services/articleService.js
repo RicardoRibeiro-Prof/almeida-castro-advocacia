@@ -12,9 +12,8 @@ const articleFiles = import.meta.glob('../content/articles/*.md', {
 marked.setOptions({ gfm: true, breaks: false })
 
 function resolvePublicAsset(value) {
-  const fallback = 'images/articles/default.svg'
+  const fallback = 'images/articles/general.jpg'
   const asset = value || fallback
-  if (/^https?:\/\/images\.unsplash\.com/i.test(asset)) return `${import.meta.env.BASE_URL}${fallback}`
   if (/^(https?:|data:|blob:)/i.test(asset)) return asset
   return `${import.meta.env.BASE_URL}${asset.replace(/^\/+/, '')}`
 }
@@ -61,7 +60,7 @@ function normalizeArticle(filePath, raw) {
     content: DOMPurify.sanitize(parsedContent, { USE_PROFILES: { html: true } }),
     content_markdown: body,
     cover_image_url: resolvePublicAsset(attributes.cover),
-    cover_alt: attributes.coverAlt || attributes.cover_alt || `Ilustração do artigo ${attributes.title || fileSlug}`,
+    cover_alt: attributes.coverAlt || attributes.cover_alt || `Fotografia ilustrativa do artigo ${attributes.title || fileSlug}`,
     canonical: attributes.canonical || '',
     no_index: Boolean(attributes.noIndex || attributes.no_index),
     keywords: normalizeKeywords(attributes.keywords),
