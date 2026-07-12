@@ -3,12 +3,17 @@ title: "Como funciona o benefício por incapacidade temporária"
 slug: "como-funciona-o-beneficio-por-incapacidade-temporaria"
 category: "Direito Previdenciário"
 summary: "Entenda os principais requisitos, documentos e etapas normalmente relacionados ao benefício por incapacidade temporária."
-cover: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=1400&q=86"
+excerpt: "Requisitos, documentos e etapas do benefício por incapacidade temporária explicados de forma objetiva e informativa."
+cover: "/images/articles/default.svg"
+coverAlt: "Ilustração institucional sobre benefício por incapacidade temporária"
 author: "Dra. Marina Castro"
 date: "2026-07-08T12:00:00.000Z"
+updatedAt: "2026-07-12T12:00:00.000Z"
+keywords: ["benefício por incapacidade", "INSS", "direito previdenciário"]
 readingTime: 5
 featured: true
 published: true
+noIndex: false
 ---
 O benefício por incapacidade temporária é destinado ao segurado que, em razão de doença ou acidente, fica impossibilitado de exercer sua atividade habitual por determinado período. A análise não depende apenas do diagnóstico: também considera a repercussão da condição de saúde sobre o trabalho efetivamente realizado.
 
