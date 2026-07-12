@@ -1,0 +1,82 @@
+name: Verificar build final
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-final-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  VITE_SITE_URL: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia
+  VITE_BASE_PATH: /almeida-castro-advocacia/
+  VITE_IS_DEMO: 'true'
+  VITE_ALLOW_INDEXING: 'false'
+  VITE_PRODUCTION_DATA_CONFIRMED: 'false'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20.19.5
+          cache: npm
+      - name: Executar validações
+        shell: bash
+        run: |
+          set +e
+          : > final-build.log
+          npm ci --no-audit --no-fund >> final-build.log 2>&1
+          CI_CODE=$?
+
+          if [ "$CI_CODE" -eq 0 ]; then
+            npm run lint:imports >> final-build.log 2>&1
+            LINT_CODE=$?
+          else
+            LINT_CODE=99
+          fi
+
+          if [ "$CI_CODE" -eq 0 ] && [ "$LINT_CODE" -eq 0 ]; then
+            npm run build >> final-build.log 2>&1
+            BUILD_CODE=$?
+          else
+            BUILD_CODE=99
+          fi
+
+          RESULT='SUCESSO'
+          if [ "$CI_CODE" -ne 0 ] || [ "$LINT_CODE" -ne 0 ] || [ "$BUILD_CODE" -ne 0 ]; then
+            RESULT='FALHA'
+          fi
+
+          EXPORTED=$(find dist -type f -path '*/index.html' 2>/dev/null | wc -l | tr -d ' ')
+          {
+            echo '# Verificação automatizada do build'
+            echo
+            echo "Resultado: **$RESULT**"
+            echo
+            echo "- Data UTC: $(date -u '+%Y-%m-%d %H:%M:%S')"
+            echo "- Commit verificado: $GITHUB_SHA"
+            echo "- Node: $(node --version 2>/dev/null || echo indisponível)"
+            echo "- npm: $(npm --version 2>/dev/null || echo indisponível)"
+            echo "- npm ci: código $CI_CODE"
+            echo "- lint:imports: código $LINT_CODE"
+            echo "- build, pré-renderização e auditorias: código $BUILD_CODE"
+            echo "- Arquivos index.html gerados: $EXPORTED"
+            echo
+            echo '```text'
+            tail -n 240 final-build.log
+            echo '```'
+          } > BUILD-VERIFICATION.md
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add BUILD-VERIFICATION.md
+          git commit -m 'Atualiza verificação automatizada do build' || true
+          git push
+
+          if [ "$RESULT" = 'FALHA' ]; then exit 1; fi
