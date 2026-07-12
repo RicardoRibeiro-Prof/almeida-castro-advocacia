@@ -1,0 +1,115 @@
+name: Verificar build e publicação atuais
+
+on:
+  push:
+    paths:
+      - '.github/workflows/verify-current-build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  VITE_SITE_URL: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia
+  VITE_BASE_PATH: /almeida-castro-advocacia/
+  VITE_IS_DEMO: 'true'
+  VITE_ALLOW_INDEXING: 'false'
+  VITE_PRODUCTION_DATA_CONFIRMED: 'false'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v7
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20.19.5
+          cache: npm
+
+      - name: Executar build e auditorias
+        shell: bash
+        run: |
+          set +e
+          : > verification.log
+
+          npm ci >> verification.log 2>&1
+          CI_CODE=$?
+
+          if [ "$CI_CODE" -eq 0 ]; then
+            npm run lint:imports >> verification.log 2>&1
+            LINT_CODE=$?
+          else
+            LINT_CODE=99
+          fi
+
+          if [ "$CI_CODE" -eq 0 ] && [ "$LINT_CODE" -eq 0 ]; then
+            npm run build >> verification.log 2>&1
+            BUILD_CODE=$?
+          else
+            BUILD_CODE=99
+          fi
+
+          DEPLOY_CODE=99
+          if [ "$BUILD_CODE" -eq 0 ]; then
+            sleep 90
+            AUDIT_SITE_URL='https://ricardoribeiro-prof.github.io/almeida-castro-advocacia' \
+            AUDIT_ATTEMPTS='30' \
+            AUDIT_DELAY_MS='5000' \
+            npm run audit:deployed >> verification.log 2>&1
+            DEPLOY_CODE=$?
+          fi
+
+          RESULT='SUCESSO'
+          if [ "$CI_CODE" -ne 0 ] || [ "$LINT_CODE" -ne 0 ] || [ "$BUILD_CODE" -ne 0 ] || [ "$DEPLOY_CODE" -ne 0 ]; then
+            RESULT='FALHA'
+          fi
+
+          EXPORTED=$(find dist -type f -name index.html 2>/dev/null | wc -l | tr -d ' ')
+          ARTICLE_PAGES=$(find dist/artigos -mindepth 2 -type f -name index.html 2>/dev/null | wc -l | tr -d ' ')
+          HOME_CANONICAL=$(grep -o '<link rel="canonical" href="[^"]*"' dist/index.html 2>/dev/null | head -n 1 | sed 's/.*href="//' | sed 's/"$//')
+          ABOUT_CANONICAL=$(grep -o '<link rel="canonical" href="[^"]*"' dist/sobre/index.html 2>/dev/null | head -n 1 | sed 's/.*href="//' | sed 's/"$//')
+          SITEMAP_URLS=$(grep -c '<url>' dist/sitemap.xml 2>/dev/null || true)
+
+          {
+            echo '# Verificação automatizada do build e da publicação'
+            echo
+            echo "Resultado: **$RESULT**"
+            echo
+            echo "- Data UTC: $(date -u '+%Y-%m-%d %H:%M:%S')"
+            echo "- Commit verificado: $GITHUB_SHA"
+            echo "- Node: $(node --version 2>/dev/null || echo indisponível)"
+            echo "- npm: $(npm --version 2>/dev/null || echo indisponível)"
+            echo "- npm ci: código $CI_CODE"
+            echo "- lint:imports: código $LINT_CODE"
+            echo "- build, pré-renderização e auditoria de dist: código $BUILD_CODE"
+            echo "- auditoria HTTP da publicação: código $DEPLOY_CODE"
+            echo "- arquivos index.html em dist: $EXPORTED"
+            echo "- artigos pré-renderizados: $ARTICLE_PAGES"
+            echo "- canonical inicial: $HOME_CANONICAL"
+            echo "- canonical interno: $ABOUT_CANONICAL"
+            echo "- URLs no sitemap demonstrativo: $SITEMAP_URLS"
+            echo
+            echo '## robots.txt gerado'
+            echo
+            echo '```text'
+            cat dist/robots.txt 2>/dev/null || true
+            echo '```'
+            echo
+            echo '## Saída das verificações'
+            echo
+            echo '```text'
+            tail -n 280 verification.log
+            echo '```'
+          } > BUILD-VERIFICATION.md
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add BUILD-VERIFICATION.md
+          git commit -m 'Atualiza verificação automatizada do build e deploy' || true
+          git push
+
+          if [ "$RESULT" = 'FALHA' ]; then exit 1; fi
