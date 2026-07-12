@@ -1,264 +1,449 @@
-# Almeida & Castro Advocacia — versão sem Supabase
+# Almeida & Castro Advocacia
 
-Site institucional desenvolvido com **Vite, React e JavaScript**, com blog administrável por meio do **Decap CMS**, autenticação pelo **Netlify Identity** e armazenamento dos conteúdos no **GitHub**.
+Site institucional demonstrativo desenvolvido com **React, Vite e JavaScript**, com páginas públicas pré-renderizadas, blog em Markdown, painel administrativo próprio e publicação automatizada.
 
-Esta versão não utiliza Supabase, banco de dados ou servidor próprio. Os artigos são arquivos Markdown salvos no repositório e as imagens enviadas pelo painel ficam em `public/uploads`.
+> **Projeto demonstrativo:** o escritório, os profissionais, os números de OAB, os contatos, o endereço e parte das imagens e textos são fictícios. A indexação permanece bloqueada até que todos os dados reais sejam substituídos e confirmados.
 
-> Todos os nomes, números de OAB, contatos, profissionais e textos do projeto são fictícios. Revise o conteúdo antes de utilizar em um escritório real.
+## Recursos implementados
 
-## 1. Como funciona
+- layout responsivo preservado em React;
+- rotas públicas com `BrowserRouter` e suporte a caminho-base;
+- exportação estática para arquivos reais em `dist`;
+- HTML pré-renderizado dentro de `#root`;
+- fallback legível sem JavaScript;
+- metadados específicos por rota;
+- canonical, Open Graph e Twitter Cards;
+- sitemap e robots gerados automaticamente;
+- artigos publicados pré-renderizados;
+- artigos futuros e ocultos excluídos do build público;
+- dados estruturados somente em produção confirmada e indexável;
+- validação de configuração, importações, build, HTML, assets e caminhos-base;
+- auditoria opcional do site já publicado;
+- painel administrativo em `/admin/`, com gravação direta no GitHub;
+- workflow oficial do GitHub Pages publicando exclusivamente `dist`.
 
-- O site público é construído pelo Vite;
-- Os artigos ficam em `src/content/articles`;
-- O painel está em `/admin`;
-- O Decap CMS edita os arquivos no GitHub usando o Git Gateway;
-- O Netlify Identity controla quem pode entrar;
-- Ao publicar um artigo, a Netlify faz um novo deploy automaticamente;
-- Rascunhos são gerenciados pelo fluxo editorial do CMS e não aparecem no site enquanto não forem publicados.
-
-## 2. Estrutura principal
+## Estrutura principal
 
 ```text
-almeida-castro-advocacia-decap/
+almeida-castro-advocacia/
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml
 ├── public/
 │   ├── admin/
 │   │   ├── index.html
-│   │   └── config.yml
+│   │   ├── admin.css
+│   │   ├── admin.js
+│   │   └── admin-password.js
+│   ├── icons/
 │   ├── images/
-│   ├── uploads/
-│   ├── _redirects
-│   ├── robots.txt
-│   └── sitemap.xml
+│   └── uploads/
 ├── scripts/
+│   ├── audit-deployed-site.mjs
+│   ├── audit-dist.mjs
+│   ├── check-config.mjs
 │   ├── check-imports.mjs
-│   └── generate-sitemap.mjs
+│   ├── generate-manifest.mjs
+│   ├── generate-robots.mjs
+│   ├── generate-sitemap.mjs
+│   ├── site-routes.mjs
+│   ├── static-export.mjs
+│   └── validate-build.mjs
 ├── src/
 │   ├── components/
+│   ├── config/
+│   │   └── site.js
 │   ├── content/
 │   │   └── articles/
 │   ├── data/
-│   ├── layouts/
 │   ├── pages/
 │   ├── services/
 │   ├── styles/
-│   └── utils/
+│   └── main.jsx
 ├── .env.example
+├── BUILD-VERIFICATION.md
+├── index.html
 ├── netlify.toml
 ├── package.json
 └── vite.config.js
 ```
 
-## 3. Instalar e executar no computador
+## Instalação local
 
-1. Instale a versão LTS do Node.js.
-2. Extraia o ZIP.
-3. Abra a pasta no VS Code.
-4. Abra o terminal e execute:
+Requisitos:
+
+- Node.js `20.19.5` ou outra versão compatível com `>=20.19.0 <21`;
+- npm instalado com o Node.js.
 
 ```bash
-npm install
+npm ci
+npm run lint:imports
 npm run dev
 ```
 
-Acesse o endereço exibido no terminal, normalmente:
+O endereço local costuma ser `http://localhost:5173`.
 
-```text
-http://localhost:5173
+## Build completo
+
+```bash
+npm run build
 ```
 
-O site público funciona localmente. O painel `/admin` precisa do site conectado ao GitHub e publicado na Netlify para autenticação e gravação dos artigos.
+O comando executa, em ordem:
 
-## 4. Criar o repositório no GitHub
+1. validação das variáveis e das proteções de indexação;
+2. conferência das fotografias necessárias;
+3. build do Vite;
+4. exportação estática de todas as rotas públicas;
+5. geração do sitemap;
+6. geração do robots.txt;
+7. geração do manifest;
+8. validação estrutural do build;
+9. auditoria completa da pasta `dist`.
 
-1. Entre no GitHub e crie um repositório novo.
-2. O nome pode ser `almeida-castro-advocacia`.
-3. Envie todo o conteúdo deste projeto para a raiz do repositório.
-4. Confirme que `package.json`, `netlify.toml`, `src` e `public` aparecem na página inicial do repositório.
-5. Use a branch principal chamada `main`.
+O build falha quando uma rota não possui HTML pré-renderizado, H1, metadados, canonical, CSS, JavaScript, conteúdo textual ou assets válidos.
 
-Não envie as pastas `node_modules` e `dist`.
+## Como funciona a exportação estática
 
-## 5. Publicar na Netlify
+O Vite gera inicialmente o aplicativo e seus bundles. Em seguida, `scripts/static-export.mjs` cria arquivos HTML reais para cada rota.
 
-1. Entre na Netlify.
-2. Escolha **Add new project**.
-3. Clique em **Import an existing project**.
-4. Conecte o GitHub.
-5. Escolha o repositório.
-6. Confirme:
+Exemplos:
+
+```text
+dist/index.html
+dist/sobre/index.html
+dist/areas-de-atuacao/index.html
+dist/areas-de-atuacao/direito-previdenciario/index.html
+dist/equipe/index.html
+dist/artigos/index.html
+dist/artigos/nome-do-artigo/index.html
+dist/contato/index.html
+dist/politica-de-privacidade/index.html
+dist/404.html
+```
+
+Cada documento contém `data-prerendered="true"`, cabeçalho, navegação, breadcrumbs, conteúdo, links e rodapé dentro de `#root`.
+
+O React é montado primeiro em um elemento separado e ainda não anexado ao documento. O conteúdo estático só é substituído depois da primeira renderização funcional. Assim, uma falha anterior à inicialização não apaga o HTML disponível.
+
+## Funcionamento sem JavaScript
+
+Com JavaScript desativado, as páginas continuam exibindo:
+
+- cabeçalho e menu;
+- títulos e conteúdo principal;
+- breadcrumbs;
+- áreas de atuação;
+- equipe demonstrativa;
+- artigos completos;
+- informações de contato;
+- política de privacidade;
+- links internos e rodapé.
+
+O `<noscript>` informa que busca, formulário e painel administrativo exigem JavaScript. Na página de contato, canais diretos permanecem disponíveis como alternativa ao formulário interativo.
+
+## Configuração central dos dados
+
+Os dados institucionais são centralizados em:
+
+```text
+src/config/site.js
+```
+
+Também podem ser substituídos por variáveis de ambiente, conforme `.env.example`.
+
+Não altere `src/utils/constants.js` para configurar os dados principais do escritório. Esse arquivo utiliza a configuração central.
+
+Principais variáveis:
+
+```text
+VITE_SITE_URL
+VITE_BASE_PATH
+VITE_IS_DEMO
+VITE_ALLOW_INDEXING
+VITE_PRODUCTION_DATA_CONFIRMED
+VITE_SITE_NAME
+VITE_SITE_SHORT_NAME
+VITE_SITE_DESCRIPTION
+VITE_SITE_AUTHOR
+VITE_SITE_ADDRESS
+VITE_SITE_PHONE
+VITE_SITE_WHATSAPP
+VITE_SITE_EMAIL
+VITE_SITE_LOGO
+VITE_SITE_SHARE_IMAGE
+VITE_INSTAGRAM_URL
+VITE_LINKEDIN_URL
+```
+
+## Modo demonstração
+
+Configuração atual do GitHub Pages:
+
+```env
+VITE_SITE_URL=https://ricardoribeiro-prof.github.io/almeida-castro-advocacia
+VITE_BASE_PATH=/almeida-castro-advocacia/
+VITE_IS_DEMO=true
+VITE_ALLOW_INDEXING=false
+VITE_PRODUCTION_DATA_CONFIRMED=false
+```
+
+Neste modo:
+
+- todas as páginas recebem `noindex, nofollow` para `robots` e `googlebot`;
+- o robots.txt permite rastreamento com `Allow: /`;
+- o sitemap é um XML válido e vazio;
+- o robots.txt não referencia o sitemap;
+- dados estruturados de empresa não são publicados;
+- o build impede a ativação acidental da indexação.
+
+## Sitemap e robots.txt
+
+Não edite manualmente arquivos em `public/robots.txt` ou `public/sitemap.xml`.
+
+Eles são gerados durante o build por:
+
+```text
+scripts/generate-robots.mjs
+scripts/generate-sitemap.mjs
+```
+
+Em demonstração, o sitemap não contém URLs indexáveis.
+
+Em produção confirmada, o sitemap inclui:
+
+- páginas institucionais;
+- todas as áreas jurídicas;
+- apenas artigos publicados;
+- nenhum artigo futuro;
+- nenhum artigo marcado com `noIndex`;
+- datas de atualização válidas;
+- canonicals no domínio oficial.
+
+## Canonicals e caminho-base
+
+No GitHub Pages, o domínio e a subpasta fazem parte de `VITE_SITE_URL`:
+
+```text
+https://ricardoribeiro-prof.github.io/almeida-castro-advocacia
+```
+
+Exemplos gerados:
+
+```text
+https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/
+https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/sobre/
+https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/areas-de-atuacao/
+https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/artigos/
+```
+
+As funções em `src/config/site.js` removem um caminho-base já presente antes de montar URLs. As auditorias bloqueiam URLs sem a subpasta e caminhos duplicados.
+
+## Assets no GitHub Pages
+
+O Vite utiliza:
+
+```env
+VITE_BASE_PATH=/almeida-castro-advocacia/
+```
+
+Isso é aplicado a:
+
+- bundles JavaScript e CSS;
+- favicon e manifest;
+- ícones;
+- fotografias institucionais;
+- capas dos artigos;
+- imagem Open Graph;
+- uploads em `public/uploads`;
+- painel em `public/admin`.
+
+Caminhos armazenados nos artigos podem continuar no formato `/uploads/arquivo.jpg` ou `/images/arquivo.jpg`; o site resolve esses caminhos sob a subpasta configurada.
+
+## Criar e editar artigos
+
+Os artigos ficam em:
+
+```text
+src/content/articles/*.md
+```
+
+Exemplo de frontmatter:
+
+```yaml
+---
+title: "Título do artigo"
+slug: "titulo-do-artigo"
+category: "Direito Civil"
+summary: "Resumo do conteúdo."
+cover: "/uploads/capa.jpg"
+coverAlt: "Descrição acessível da imagem"
+author: "Nome do autor"
+date: "2026-07-12T12:00:00.000Z"
+updatedAt: "2026-07-12T12:00:00.000Z"
+readingTime: 5
+featured: false
+published: true
+noIndex: false
+---
+```
+
+Também é possível usar o painel:
+
+```text
+https://endereco-do-site/admin/
+```
+
+O painel utiliza um token fine-grained do GitHub limitado a este repositório, com permissão `Contents: Read and write`. No primeiro acesso, o token pode ser protegido no navegador com uma senha. Ele é criptografado localmente com Web Crypto e não é gravado no código ou enviado a um servidor próprio.
+
+Cada artigo ou imagem salvo gera um commit na branch `main`, iniciando uma nova publicação.
+
+## Publicação no GitHub Pages
+
+O workflow permanente está em:
+
+```text
+.github/workflows/deploy-pages.yml
+```
+
+Ele executa em cada push para `main` e também aceita execução manual.
+
+Etapas principais:
+
+1. checkout do repositório;
+2. configuração oficial do GitHub Pages;
+3. Node.js `20.19.5`;
+4. `npm ci`;
+5. `npm run lint:imports`;
+6. `npm run build`;
+7. upload exclusivo da pasta `dist`;
+8. deploy do artifact no ambiente `github-pages`;
+9. auditoria HTTP do site publicado.
+
+No repositório, acesse **Settings > Pages** e selecione **GitHub Actions** como fonte de publicação. Depois disso, qualquer push em `main` inicia o deploy.
+
+Para executar manualmente, abra **Actions > Publicar site pré-renderizado > Run workflow**.
+
+## Publicação no Netlify
+
+O `netlify.toml` já define:
 
 ```text
 Build command: npm run build
 Publish directory: dist
+Node: 20.19.5
 ```
 
-7. Em variáveis de ambiente, cadastre:
+Para uma demonstração hospedada na raiz:
 
-```text
+```env
 VITE_SITE_URL=https://nome-do-site.netlify.app
+VITE_BASE_PATH=/
+VITE_IS_DEMO=true
+VITE_ALLOW_INDEXING=false
+VITE_PRODUCTION_DATA_CONFIRMED=false
 ```
 
-8. Publique o projeto.
+A regra SPA possui `force = false`. Portanto, arquivos reais como `/sobre/index.html`, páginas de áreas e artigos são entregues antes do fallback para `/index.html`.
 
-O arquivo `netlify.toml` já contém as configurações de build e os redirecionamentos necessários.
+O cache está configurado para:
 
-## 6. Ativar o Netlify Identity
+- HTML e rotas: revalidação imediata;
+- bundles com hash em `/assets/*`: um ano e `immutable`;
+- imagens e ícones: cache intermediário;
+- uploads: cache de 30 dias com revalidação;
+- robots e sitemap: revalidação imediata;
+- painel administrativo: `no-store` e `noindex`.
 
-Depois da primeira publicação:
+## Domínio próprio
 
-1. Abra o projeto na Netlify.
-2. Entre em **Project configuration > Identity**.
-3. Clique em **Enable Identity**.
-4. Em configurações de registro, escolha **Invite only**.
+Depois de configurar o domínio no provedor de hospedagem:
 
-Não deixe o cadastro aberto, pois somente pessoas autorizadas devem acessar o painel.
+1. confirme HTTPS ativo;
+2. altere `VITE_SITE_URL` para o domínio oficial, sem barra final;
+3. use `VITE_BASE_PATH=/` quando o site estiver na raiz;
+4. substitua todos os dados demonstrativos;
+5. execute o build ainda com indexação desativada;
+6. revise o HTML publicado;
+7. somente depois ative a produção indexável.
 
-## 7. Ativar o Git Gateway
+Não é necessário editar robots.txt ou sitemap.xml: ambos serão regenerados.
 
-1. Ainda nas configurações de Identity, localize **Services**.
-2. Entre em **Git Gateway**.
-3. Clique em **Enable Git Gateway**.
-4. Confirme que o Gateway está ligado ao mesmo repositório do site.
+## Transformar o projeto demonstrativo em site real
 
-O Git Gateway permite que o painel grave artigos e imagens no GitHub sem entregar ao advogado acesso direto ao repositório.
+Antes de habilitar a indexação, é obrigatório substituir e conferir:
 
-## 8. Criar o primeiro administrador
+- nome do escritório;
+- profissionais;
+- números de OAB;
+- telefone;
+- WhatsApp;
+- e-mail;
+- endereço;
+- redes sociais;
+- domínio;
+- logotipo;
+- imagens;
+- textos demonstrativos;
+- política de privacidade;
+- dados estruturados.
 
-1. Na Netlify, abra **Project configuration > Identity > Users**.
-2. Clique em **Invite users**.
-3. Informe o e-mail do administrador.
-4. O administrador receberá um convite.
-5. Ao abrir o convite, ele deverá cadastrar uma senha.
+Também revise áreas de atuação, horários, autores dos artigos, avisos jurídicos e conformidade ética aplicável.
 
-Depois, o painel estará disponível em:
+Configuração esperada para produção no domínio oficial:
 
-```text
-https://nome-do-site.netlify.app/admin/
+```env
+VITE_SITE_URL=https://dominio-oficial.com.br
+VITE_BASE_PATH=/
+VITE_IS_DEMO=false
+VITE_ALLOW_INDEXING=true
+VITE_PRODUCTION_DATA_CONFIRMED=true
 ```
 
-O endereço antigo `/admin/login` redireciona automaticamente para `/admin/`.
+Proteções aplicadas:
 
-## 9. Publicar um artigo
+- `VITE_IS_DEMO=true` impede a indexação;
+- solicitar indexação com `VITE_IS_DEMO=true` faz o build falhar;
+- solicitar indexação com `VITE_PRODUCTION_DATA_CONFIRMED=false` faz o build falhar;
+- dados demonstrativos conhecidos fazem o build falhar quando a produção é confirmada;
+- dados estruturados só são incluídos quando a produção está confirmada e indexável.
 
-1. Acesse `/admin/`.
-2. Entre com o e-mail convidado.
-3. Clique em **Artigos > Novo Artigo**.
-4. Preencha título, slug, categoria, resumo, imagem, autor e conteúdo.
-5. Clique em **Salvar** para manter como rascunho.
-6. Use o fluxo editorial para enviar para revisão ou publicar.
-7. Quando o artigo for publicado, o CMS cria uma alteração no GitHub e a Netlify inicia um novo deploy.
-
-O artigo aparecerá no site depois que o deploy terminar.
-
-## 10. Editar ou excluir artigos
-
-No painel:
-
-- Abra um artigo para alterar o conteúdo;
-- Salve e publique novamente;
-- Use a opção de excluir quando precisar removê-lo;
-- O histórico das alterações continuará disponível no GitHub.
-
-## 11. Imagens
-
-As imagens enviadas pelo painel são armazenadas em:
-
-```text
-public/uploads/
-```
-
-O endereço público é:
-
-```text
-/uploads/nome-da-imagem.jpg
-```
-
-Antes do upload, prefira imagens em JPG, PNG ou WEBP, otimizadas e com até aproximadamente 2 MB. O Decap CMS não aplica sozinho um limite rígido de 5 MB nesta configuração; portanto, a equipe deve evitar arquivos grandes.
-
-## 12. Categorias
-
-As categorias também podem ser administradas sem alterar o código:
-
-1. Acesse `/admin/`;
-2. Entre em **Configurações > Categorias**;
-3. Adicione, edite ou remova itens;
-4. Use um slug com letras minúsculas, números e hífens;
-5. Salve e publique a alteração.
-
-As categorias são armazenadas em:
-
-```text
-src/content/settings/categories.yml
-```
-
-Evite excluir uma categoria que ainda esteja sendo utilizada por artigos publicados.
-
-## 13. Alterar WhatsApp e dados do escritório
-
-Abra:
-
-```text
-src/utils/constants.js
-```
-
-Altere número do WhatsApp, telefone, endereço, e-mail, horários e redes sociais. Use o número com código do país e DDD, sem espaços ou símbolos.
-
-## 14. Alterar equipe, áreas e textos
-
-- Equipe: `src/data/team.js`
-- Áreas de atuação: `src/data/practiceAreas.jsx`
-- Contatos: `src/utils/constants.js`
-- Textos institucionais: arquivos em `src/pages`
-- Imagens institucionais: `public/images`
-- Artigos: `src/content/articles`
-
-## 15. Domínio próprio
-
-1. Na Netlify, abra **Domain management**.
-2. Clique em **Add a domain**.
-3. Informe o domínio.
-4. Siga as orientações de DNS mostradas pela Netlify.
-5. Depois que o domínio funcionar, altere a variável `VITE_SITE_URL` para o domínio oficial.
-6. Faça um novo deploy.
-7. Atualize a URL do sitemap dentro de `public/robots.txt`.
-
-## 16. Backup
-
-O GitHub já mantém o histórico de todos os artigos e alterações. Como cópia adicional:
-
-1. Abra o repositório no GitHub.
-2. Clique em **Code > Download ZIP**.
-3. Guarde o arquivo em local seguro.
-
-Também é possível clonar o repositório no computador com Git.
-
-## 17. Verificações antes de publicar
+Antes da indexação, execute:
 
 ```bash
-npm install
+npm ci
 npm run lint:imports
 npm run build
 npm run preview
 ```
 
-Confira:
+## Auditorias
 
-- Página inicial;
-- Menus e rotas;
-- Busca e filtros do blog;
-- Página individual de artigo;
-- Responsividade;
-- Botão do WhatsApp;
-- `/admin/` após ativar Identity e Git Gateway;
-- Criação de rascunho;
-- Upload de imagem;
-- Publicação e novo deploy.
+Auditar a pasta gerada:
 
-## 18. Observações importantes
+```bash
+npm run audit:dist
+```
 
-- Não há cadastro público de administradores;
-- Não há banco de dados externo;
-- Não há chaves secretas no frontend;
-- O conteúdo só muda no site após o novo deploy;
-- O painel depende da Netlify, GitHub, Identity e Git Gateway;
-- Revise os textos e as regras éticas da advocacia antes do uso real.
+Auditar uma publicação existente, sem alterar o site:
+
+```bash
+AUDIT_SITE_URL=https://ricardoribeiro-prof.github.io/almeida-castro-advocacia npm run audit:deployed
+```
+
+A auditoria publicada verifica status HTTP, títulos, H1, canonicals, conteúdo pré-renderizado, noindex, CSS, JavaScript, robots, sitemap, artigo e página 404.
+
+## Registro de verificação
+
+`BUILD-VERIFICATION.md` registra o resultado da última validação automatizada executada no ambiente de CI, incluindo versões do Node e npm, quantidade de páginas exportadas e saída das auditorias.
+
+## Cuidados de segurança e manutenção
+
+- nunca publique ou envie o token do GitHub para terceiros;
+- limite o token ao repositório e à permissão `Contents: Read and write`;
+- revogue tokens que tenham sido expostos;
+- não envie `node_modules` nem `dist` ao repositório;
+- mantenha imagens otimizadas;
+- revise artigos e datas antes de publicar;
+- mantenha o modo demonstração enquanto os dados forem fictícios;
+- verifique o workflow após alterações em dependências, rotas ou scripts de build.
