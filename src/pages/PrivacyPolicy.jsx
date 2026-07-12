@@ -1,23 +1,28 @@
 import PageHero from '../components/PageHero'
 import Seo from '../components/Seo'
+import SITE from '../config/site'
 import { CONTACT_INFO } from '../utils/constants'
 
 export default function PrivacyPolicy() {
   return (
     <>
-      <Seo title="Política de Privacidade" description="Política de privacidade e tratamento de dados do site Almeida & Castro Advocacia." />
+      <Seo
+        title="Política de Privacidade | Almeida & Castro Advocacia"
+        description="Saiba como este site demonstrativo prepara mensagens para o WhatsApp sem manter banco de dados próprio para o formulário."
+        path="/politica-de-privacidade"
+      />
       <PageHero eyebrow="Privacidade" title="Política de Privacidade" description="Informações gerais sobre o tratamento de dados neste site demonstrativo." breadcrumbs={[{ label: 'Política de Privacidade' }]} />
       <section className="section">
         <article className="container legal-content">
-          <p><strong>Última atualização:</strong> 11 de julho de 2026.</p>
-          <h2>1. Finalidade desta política</h2><p>Esta política explica, de forma geral, como informações podem ser tratadas durante a navegação e o contato com o escritório. Este projeto utiliza dados fictícios e deve ser revisado antes da publicação por um escritório real.</p>
-          <h2>2. Dados fornecidos pelo visitante</h2><p>Ao utilizar os canais de contato, o visitante pode informar nome, telefone, e-mail e uma breve descrição do assunto. Recomenda-se não enviar documentos, senhas, dados bancários ou informações sensíveis por formulários públicos.</p>
-          <h2>3. Finalidades do tratamento</h2><p>As informações podem ser usadas para responder ao contato, organizar o atendimento inicial, cumprir obrigações legais e proteger a segurança dos canais digitais.</p>
-          <h2>4. Serviços de terceiros</h2><p>O site pode utilizar serviços de hospedagem, banco de dados, mapas e WhatsApp. Cada serviço possui políticas e condições próprias.</p>
-          <h2>5. Cookies e registros técnicos</h2><p>A infraestrutura de hospedagem pode registrar dados técnicos, como endereço IP, navegador, horário de acesso e páginas visitadas, para segurança e funcionamento.</p>
-          <h2>6. Segurança</h2><p>São adotadas medidas técnicas compatíveis com o projeto, incluindo autenticação administrativa, políticas de acesso no banco de dados e uso de conexão segura.</p>
-          <h2>7. Direitos do titular</h2><p>O titular pode solicitar informações, correção ou exclusão de dados quando aplicável, observadas as obrigações legais de conservação.</p>
-          <h2>8. Contato</h2><p>Dúvidas sobre esta política podem ser enviadas para <a href={`mailto:${CONTACT_INFO.email}`}>{CONTACT_INFO.email}</a>.</p>
+          <p><strong>Última atualização:</strong> <time dateTime="2026-07-12">12 de julho de 2026</time>.</p>
+          {SITE.isDemo && <p className="informative-box"><strong>Aviso:</strong> este projeto utiliza dados fictícios e esta política deverá ser revisada antes da publicação por um escritório real.</p>}
+          <h2>1. Finalidade desta política</h2><p>Esta política explica, de forma geral, como as informações são tratadas durante a navegação e o contato. O site não mantém banco de dados próprio para os dados preenchidos no formulário de contato.</p>
+          <h2>2. Dados informados pelo visitante</h2><p>O formulário pode receber nome, telefone, assunto e uma breve mensagem. Esses dados são utilizados somente para preparar o texto que será aberto no WhatsApp. Não envie documentos, senhas, dados bancários ou informações sensíveis.</p>
+          <h2>3. Envio pelo WhatsApp</h2><p>O visitante revisa a mensagem antes do envio. Ao prosseguir, o tratamento das informações também passa a seguir os termos e as políticas do WhatsApp.</p>
+          <h2>4. Serviços de terceiros</h2><p>A hospedagem e outros serviços técnicos podem registrar informações necessárias para segurança e funcionamento, como endereço IP, navegador, horário de acesso e páginas visitadas.</p>
+          <h2>5. Cookies e armazenamento local</h2><p>O site público não utiliza cookies próprios de publicidade. O painel administrativo utiliza armazenamento local apenas no navegador autorizado, conforme sua configuração de acesso.</p>
+          <h2>6. Segurança</h2><p>São adotadas práticas como conexão HTTPS, ausência de credenciais no código público, sanitização do conteúdo dos artigos e permissões restritas no painel administrativo.</p>
+          <h2>7. Direitos e contato</h2><p>Em uma publicação real, solicitações relacionadas a dados pessoais deverão ser tratadas pelo responsável informado pelo escritório. Neste projeto demonstrativo, o e-mail exibido é fictício: <a href={`mailto:${CONTACT_INFO.email}`}>{CONTACT_INFO.email}</a>.</p>
         </article>
       </section>
     </>
