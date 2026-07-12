@@ -3,7 +3,7 @@ import PageHero from '../components/PageHero'
 import SectionHeading from '../components/SectionHeading'
 import Seo from '../components/Seo'
 
-const ABOUT_IMAGE = `${import.meta.env.BASE_URL}images/about-office.jpg`
+const ABOUT_IMAGE = `${import.meta.env.BASE_URL}images/hero-office.svg`
 
 const timeline = [
   { year: '2018', title: 'Início da atuação', text: 'Formação de uma proposta de atendimento jurídico próximo, ético e organizado.' },
@@ -36,7 +36,7 @@ export default function About() {
             <p>O compromisso institucional é manter uma atuação ética, discreta e tecnicamente cuidadosa, com comunicação clara durante todas as etapas do trabalho.</p>
           </div>
           <div className="image-frame image-frame--tall image-frame--premium">
-            <img src={ABOUT_IMAGE} alt="Ambiente profissional demonstrativo de atendimento" width="1500" height="1000" loading="lazy" decoding="async" />
+            <img src={ABOUT_IMAGE} alt="Ambiente jurídico moderno em madeira, azul-marinho e detalhes dourados" width="800" height="600" loading="lazy" decoding="async" />
           </div>
         </div>
       </section>
