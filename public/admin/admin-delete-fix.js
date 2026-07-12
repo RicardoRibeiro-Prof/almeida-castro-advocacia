@@ -26,6 +26,12 @@
     return path.split('/').map(encodeURIComponent).join('/')
   }
 
+  function hardRefreshPanel() {
+    const url = new URL(window.location.href)
+    url.searchParams.set('refresh', Date.now().toString())
+    window.location.replace(url.toString())
+  }
+
   async function request(url, token, options = {}) {
     const method = (options.method || 'GET').toUpperCase()
     const separator = url.includes('?') ? '&' : '?'
@@ -38,6 +44,8 @@
         Accept: 'application/vnd.github+json',
         Authorization: `Bearer ${token}`,
         'X-GitHub-Api-Version': '2022-11-28',
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
         ...(options.headers || {}),
       },
     })
@@ -106,6 +114,10 @@
     return path ? { path, title, row } : null
   }
 
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) hardRefreshPanel()
+  })
+
   document.addEventListener('click', async (event) => {
     const button = event.target.closest('button')
     if (!button) return
@@ -134,8 +146,8 @@
     try {
       await removeFile(target.path, target.title, token)
       target.row?.remove()
-      showMessage('Artigo excluído do GitHub. A atualização do site foi iniciada e pode levar alguns minutos.', 'success')
-      window.setTimeout(() => window.location.reload(), 1300)
+      showMessage('Artigo excluído do GitHub. Atualizando a lista…', 'success')
+      window.setTimeout(hardRefreshPanel, 350)
     } catch (error) {
       let message = error.message
       if (error.status === 401) message = 'Token inválido ou expirado. Gere outro token e entre novamente.'
