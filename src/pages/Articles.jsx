@@ -55,24 +55,37 @@ export default function Articles() {
 
   return (
     <>
-      <Seo title="Artigos e Informações Jurídicas" description="Artigos informativos sobre Direito Civil, Previdenciário, Trabalhista, de Família, do Consumidor e Empresarial." />
+      <Seo
+        title="Artigos Jurídicos | Almeida & Castro Advocacia"
+        description="Conteúdos informativos sobre Direito Civil, Previdenciário, Trabalhista, de Família, do Consumidor e Empresarial."
+        path="/artigos"
+      />
       <PageHero
         eyebrow="Conteúdo informativo"
         title="Artigos e informações jurídicas"
         description="Conteúdos gerais para tornar temas jurídicos mais compreensíveis. As publicações não substituem orientação individualizada."
         breadcrumbs={[{ label: 'Artigos' }]}
       />
-      <section className="section">
+      <section className="section" aria-labelledby="articles-filter-title">
         <div className="container">
+          <h2 id="articles-filter-title" className="sr-only">Pesquisar e filtrar artigos</h2>
           <div className="article-filters">
-            <label className="search-field">
+            <label className="search-field" htmlFor="article-search">
               <span className="sr-only">Buscar por título ou conteúdo</span>
-              <Search size={19} />
-              <input value={search} onChange={(event) => updateSearch(event.target.value)} placeholder="Buscar por título ou conteúdo..." />
+              <Search size={19} aria-hidden="true" />
+              <input
+                id="article-search"
+                type="search"
+                value={search}
+                onChange={(event) => updateSearch(event.target.value)}
+                placeholder="Buscar por título ou conteúdo..."
+                maxLength="100"
+                autoComplete="off"
+              />
             </label>
-            <label>
+            <label htmlFor="article-category">
               <span className="sr-only">Filtrar por categoria</span>
-              <select value={category} onChange={(event) => updateCategory(event.target.value)}>
+              <select id="article-category" value={category} onChange={(event) => updateCategory(event.target.value)}>
                 <option value="all">Todas as categorias</option>
                 {categories.map((item) => <option key={item.id || item.slug} value={item.slug}>{item.name}</option>)}
               </select>
@@ -82,10 +95,10 @@ export default function Articles() {
           {loading ? (
             <LoadingSpinner label="Carregando publicações..." />
           ) : error ? (
-            <p className="status-message status-message--error">{error}</p>
+            <p className="status-message status-message--error" role="alert">{error}</p>
           ) : paginated.length ? (
             <>
-              <p className="results-count">{filtered.length} {filtered.length === 1 ? 'artigo encontrado' : 'artigos encontrados'}</p>
+              <p className="results-count" aria-live="polite">{filtered.length} {filtered.length === 1 ? 'artigo encontrado' : 'artigos encontrados'}</p>
               <div className="article-grid article-grid--archive">
                 {paginated.map((article) => <ArticleCard key={article.id} article={article} />)}
               </div>
