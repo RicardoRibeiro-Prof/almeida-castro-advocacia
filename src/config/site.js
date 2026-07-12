@@ -12,51 +12,67 @@ const normalizeBasePath = (value = '/') => {
   return path === '//' ? '/' : path
 }
 
-const normalizeSiteUrl = (value) => String(value || 'https://ricardoribeiro-prof.github.io/almeida-castro-advocacia').replace(/\/+$/, '')
+const normalizeSiteUrl = (value) => String(
+  value || 'https://ricardoribeiro-prof.github.io/almeida-castro-advocacia',
+).replace(/\/+$/, '')
+
+const valueOr = (key, fallback) => {
+  const value = env[key]
+  return value === undefined || value === null || String(value).trim() === ''
+    ? fallback
+    : String(value).trim()
+}
 
 export const IS_DEMO = asBoolean(env.VITE_IS_DEMO, true)
+export const PRODUCTION_DATA_CONFIRMED = asBoolean(env.VITE_PRODUCTION_DATA_CONFIRMED, false)
 export const ALLOW_INDEXING = asBoolean(env.VITE_ALLOW_INDEXING, false) && !IS_DEMO
 export const BASE_PATH = normalizeBasePath(env.VITE_BASE_PATH || '/almeida-castro-advocacia/')
 export const SITE_URL = normalizeSiteUrl(env.VITE_SITE_URL)
 
 export const SITE = Object.freeze({
-  name: 'Almeida & Castro Advocacia',
-  shortName: 'Almeida & Castro',
-  description: 'Escritório de advocacia demonstrativo com atuação institucional, ética e informativa em São Raimundo Nonato, Piauí.',
+  name: valueOr('VITE_SITE_NAME', 'Almeida & Castro Advocacia'),
+  shortName: valueOr('VITE_SITE_SHORT_NAME', 'Almeida & Castro'),
+  description: valueOr(
+    'VITE_SITE_DESCRIPTION',
+    'Escritório de advocacia demonstrativo com atuação institucional, ética e informativa em São Raimundo Nonato, Piauí.',
+  ),
   url: SITE_URL,
   basePath: BASE_PATH,
-  locale: 'pt_BR',
-  language: 'pt-BR',
-  city: 'São Raimundo Nonato',
-  state: 'PI',
-  stateName: 'Piauí',
-  country: 'BR',
-  address: 'Av. Professor João Menezes, 250, Centro, São Raimundo Nonato – PI',
-  postalCode: '',
-  phone: '(89) 99999-9999',
-  whatsapp: '5589999999999',
-  email: 'contato@almeidaecastro.adv.br',
-  openingHours: 'Segunda a sexta, das 8h às 12h e das 14h às 18h',
+  locale: valueOr('VITE_SITE_LOCALE', 'pt_BR'),
+  language: valueOr('VITE_SITE_LANGUAGE', 'pt-BR'),
+  city: valueOr('VITE_SITE_CITY', 'São Raimundo Nonato'),
+  state: valueOr('VITE_SITE_STATE', 'PI'),
+  stateName: valueOr('VITE_SITE_STATE_NAME', 'Piauí'),
+  country: valueOr('VITE_SITE_COUNTRY', 'BR'),
+  address: valueOr('VITE_SITE_ADDRESS', 'Av. Professor João Menezes, 250, Centro, São Raimundo Nonato – PI'),
+  postalCode: valueOr('VITE_SITE_POSTAL_CODE', ''),
+  phone: valueOr('VITE_SITE_PHONE', '(89) 99999-9999'),
+  whatsapp: valueOr('VITE_SITE_WHATSAPP', '5589999999999'),
+  email: valueOr('VITE_SITE_EMAIL', 'contato@almeidaecastro.adv.br'),
+  openingHours: valueOr('VITE_SITE_OPENING_HOURS', 'Segunda a sexta, das 8h às 12h e das 14h às 18h'),
   social: {
-    instagram: env.VITE_INSTAGRAM_URL || '',
-    linkedin: env.VITE_LINKEDIN_URL || '',
+    instagram: valueOr('VITE_INSTAGRAM_URL', ''),
+    linkedin: valueOr('VITE_LINKEDIN_URL', ''),
   },
-  logo: '/favicon.svg',
-  shareImage: '/images/social-share.svg',
-  author: 'Almeida & Castro Advocacia',
+  logo: valueOr('VITE_SITE_LOGO', '/favicon.svg'),
+  shareImage: valueOr('VITE_SITE_SHARE_IMAGE', '/images/social-share.svg'),
+  author: valueOr('VITE_SITE_AUTHOR', 'Almeida & Castro Advocacia'),
   isDemo: IS_DEMO,
   allowIndexing: ALLOW_INDEXING,
+  productionDataConfirmed: PRODUCTION_DATA_CONFIRMED,
 })
 
 export const normalizeRoutePath = (routePath = '/') => {
-  const clean = `/${String(routePath).split(/[?#]/)[0].replace(/^\/+|\/+$/g, '')}`
-  return clean === '/' ? '/' : `${clean}/`
+  const pathname = String(routePath).split(/[?#]/)[0].trim()
+  const clean = `/${pathname.replace(/^\/+|\/+$/g, '')}`
+  if (clean === '/') return '/'
+  const isFile = /\/[^/]+\.[a-z0-9]{1,10}$/i.test(clean)
+  return isFile ? clean : `${clean}/`
 }
 
 export const buildCanonicalUrl = (routePath = '/') => {
   const route = normalizeRoutePath(routePath)
-  const baseUrl = `${SITE_URL}/`
-  return new URL(route === '/' ? '' : route.replace(/^\//, ''), baseUrl).href
+  return new URL(route === '/' ? '' : route.replace(/^\//, ''), `${SITE_URL}/`).href
 }
 
 export const buildAssetUrl = (assetPath = '') => {
