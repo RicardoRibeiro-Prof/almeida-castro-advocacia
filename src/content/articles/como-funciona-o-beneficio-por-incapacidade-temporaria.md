@@ -1,5 +1,5 @@
 ---
-title: "Como funciona o benefício por incapacidade temporária temporária"
+title: "Como funciona o benefício por incapacidade temporária"
 slug: "como-funciona-o-beneficio-por-incapacidade-temporaria"
 category: "Direito Previdenciário"
 summary: "Entenda os principais requisitos, documentos e etapas normalmente relacionados ao benefício por incapacidade temporária."
