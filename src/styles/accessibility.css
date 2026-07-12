@@ -1,0 +1,76 @@
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 9999;
+  transform: translateY(-160%);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  color: #081a2e;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+.demo-banner {
+  padding: 0.55rem 1rem;
+  background: #fff4d8;
+  color: #533b0b;
+  border-bottom: 1px solid #ead29a;
+  text-align: center;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+:where(a, button, input, textarea, select, summary):focus-visible {
+  outline: 3px solid #d6a95c;
+  outline-offset: 3px;
+}
+
+#main-content:focus {
+  outline: none;
+}
+
+.site-footer address {
+  font-style: normal;
+}
+
+.mobile-menu-button,
+.icon-button,
+.social-links a,
+.whatsapp-floating-button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.status-message[role="alert"] {
+  border-left: 4px solid currentColor;
+  padding-left: 0.8rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
