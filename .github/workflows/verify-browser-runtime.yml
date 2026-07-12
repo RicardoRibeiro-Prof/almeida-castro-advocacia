@@ -76,7 +76,8 @@ jobs:
             if (status < 200 || status >= 400) pageErrors.push(`HTTP ${status}`)
             if (!h1?.trim()) pageErrors.push('H1 visível ausente')
             if (visibleText.trim().length < 180) pageErrors.push('conteúdo visível insuficiente')
-            if (!rootReady) pageErrors.push('#root ausente')
+            if (route !== '/admin/' && !rootReady) pageErrors.push('#root ausente')
+            if (route === '/admin/' && !(await page.locator('#loginView').count())) pageErrors.push('estrutura do painel ausente')
 
             if (pageErrors.length) errors.push(`${route}: ${pageErrors.join(' | ')}`)
             console.log(`${route}: HTTP ${status}, H1=${JSON.stringify(h1?.trim() || '')}, erros=${pageErrors.length}`)
