@@ -17,7 +17,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Baixar o projeto
         uses: actions/checkout@v4
@@ -30,15 +30,30 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.19.5
+          cache: npm
 
-      - name: Instalar dependências
-        run: npm install --no-audit --no-fund
+      - name: Instalar dependências reproduzíveis
+        run: npm ci --no-audit --no-fund
 
-      - name: Construir o site
+      - name: Validar importações
+        run: npm run lint:imports
+
+      - name: Construir, pré-renderizar e validar
         env:
           VITE_BASE_PATH: ${{ steps.pages.outputs.base_path }}/
           VITE_SITE_URL: ${{ steps.pages.outputs.base_url }}
+          VITE_IS_DEMO: 'true'
+          VITE_ALLOW_INDEXING: 'false'
         run: npm run build
+
+      - name: Conferir arquivos essenciais
+        run: |
+          test -f dist/index.html
+          test -f dist/sobre/index.html
+          test -f dist/artigos/index.html
+          test -f dist/sitemap.xml
+          test -f dist/robots.txt
+          test -f dist/manifest.webmanifest
 
       - name: Enviar arquivos para publicação
         uses: actions/upload-pages-artifact@v3
