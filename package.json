@@ -1,7 +1,7 @@
 {
   "name": "almeida-castro-advocacia",
   "private": true,
-  "version": "2.1.0",
+  "version": "2.2.0",
   "type": "module",
   "engines": {
     "node": ">=20.19.0 <21"
@@ -12,12 +12,14 @@
     "dev": "vite",
     "prebuild": "node scripts/check-config.mjs && node scripts/download-site-images.mjs",
     "build": "vite build",
-    "postbuild": "node scripts/static-export.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && node scripts/generate-manifest.mjs && node scripts/validate-build.mjs && node scripts/audit-dist.mjs",
+    "postbuild": "node scripts/static-export.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && node scripts/generate-manifest.mjs && node scripts/generate-moura-queiroz-site.mjs && node scripts/validate-build.mjs && node scripts/audit-dist.mjs && node scripts/audit-moura-queiroz.mjs",
     "preview": "vite preview",
     "lint:imports": "node scripts/check-imports.mjs",
     "validate:build": "node scripts/validate-build.mjs",
     "audit:dist": "node scripts/audit-dist.mjs",
     "audit:deployed": "node scripts/audit-deployed-site.mjs",
+    "generate:moura": "node scripts/generate-moura-queiroz-site.mjs",
+    "audit:moura": "node scripts/audit-moura-queiroz.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "generate:robots": "node scripts/generate-robots.mjs"
   },
