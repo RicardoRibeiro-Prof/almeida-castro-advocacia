@@ -1,19 +1,19 @@
 # Verificação do projeto Moura & Queiroz
 
-Resultado: **FALHA**
+Resultado: **SUCESSO**
 
-- Data UTC: 2026-07-12 21:49:27
-- Commit verificado: c279c5dbf4bd303fa26e047d3121eea44755b8b1
+- Data UTC: 2026-07-12 21:51:51
+- Commit verificado: 761e0e1628b1ccf8297b208b7e96f0d34130a422
 - npm ci: código 0
 - lint:imports: código 0
-- build e auditorias: código 1
+- build e auditorias: código 0
 - páginas index.html: 16
 - artigos pré-renderizados: 3
 - canonical inicial: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/moura-queiroz-advocacia/
 
 ```text
 
-added 76 packages, and audited 77 packages in 2s
+added 76 packages, and audited 77 packages in 1s
 
 11 packages are looking for funding
   run `npm fund` for details
@@ -75,7 +75,7 @@ computing gzip size...
 [2mdist/[22m[2massets/[22m[36mrouter-DWooJzlf.js              [39m[1m[2m 36.94 kB[22m[1m[22m[2m │ gzip: 13.40 kB[22m
 [2mdist/[22m[2massets/[22m[36mcontent-CIBh7jNU.js             [39m[1m[2m 83.28 kB[22m[1m[22m[2m │ gzip: 26.80 kB[22m
 [2mdist/[22m[2massets/[22m[36mreact-vendor-DyvKcWQ1.js        [39m[1m[2m142.90 kB[22m[1m[22m[2m │ gzip: 45.77 kB[22m
-[32m✓ built in 2.80s[39m
+[32m✓ built in 2.58s[39m
 
 > almeida-castro-advocacia@2.1.0 postbuild
 > node scripts/static-export.mjs && node scripts/generate-sitemap.mjs && node scripts/generate-robots.mjs && node scripts/generate-manifest.mjs && node scripts/generate-moura-queiroz-site.mjs && node scripts/validate-build.mjs && node scripts/audit-dist.mjs && node scripts/audit-moura-queiroz.mjs
@@ -93,6 +93,10 @@ Auditoria da pasta dist concluída com sucesso.
 - página 404, canonicals, metadados, conteúdo, assets, manifest, robots e sitemap conferidos
 - canonical inicial: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/
 - canonical interno: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/sobre/
-Auditoria Moura & Queiroz falhou (1):
-- Sitemap demonstrativo não está vazio ou é inválido
+Auditoria Moura & Queiroz concluída com sucesso (dist).
+- 16 páginas HTML conferidas
+- 3 artigos e 6 áreas de atuação
+- 12 assets referenciados
+- canonical inicial: https://ricardoribeiro-prof.github.io/almeida-castro-advocacia/moura-queiroz-advocacia/
+- modo demonstração protegido com noindex, nofollow
 ```
