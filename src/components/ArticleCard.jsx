@@ -2,11 +2,11 @@ import { ArrowRight, CalendarDays, Clock3 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { formatDate } from '../utils/format'
 
-const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}images/articles/default.svg`
+const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}images/articles/general.jpg`
 
 export default function ArticleCard({ article, compact = false }) {
   const articleUrl = `/artigos/${article.slug}`
-  const imageAlt = article.cover_alt || `Ilustração do artigo ${article.title}`
+  const imageAlt = article.cover_alt || `Fotografia ilustrativa do artigo ${article.title}`
 
   return (
     <article className={`article-card ${compact ? 'article-card--compact' : ''}`}>
