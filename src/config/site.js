@@ -25,7 +25,8 @@ const valueOr = (key, fallback) => {
 
 export const IS_DEMO = asBoolean(env.VITE_IS_DEMO, true)
 export const PRODUCTION_DATA_CONFIRMED = asBoolean(env.VITE_PRODUCTION_DATA_CONFIRMED, false)
-export const ALLOW_INDEXING = asBoolean(env.VITE_ALLOW_INDEXING, false) && !IS_DEMO
+export const INDEXING_REQUESTED = asBoolean(env.VITE_ALLOW_INDEXING, false)
+export const ALLOW_INDEXING = INDEXING_REQUESTED && !IS_DEMO && PRODUCTION_DATA_CONFIRMED
 export const BASE_PATH = normalizeBasePath(env.VITE_BASE_PATH || '/almeida-castro-advocacia/')
 export const SITE_URL = normalizeSiteUrl(env.VITE_SITE_URL)
 
@@ -66,23 +67,29 @@ export const normalizeRoutePath = (routePath = '/') => {
   const pathname = String(routePath).split(/[?#]/)[0].trim()
   const clean = `/${pathname.replace(/^\/+|\/+$/g, '')}`
   if (clean === '/') return '/'
-  const isFile = /\/[^/]+\.[a-z0-9]{1,10}$/i.test(clean)
+  const isFile = /\/[^/]+\.[a-z0-9]{1,12}$/i.test(clean)
   return isFile ? clean : `${clean}/`
+}
+
+const removeBasePrefix = (value = '') => {
+  const clean = String(value).replace(/^\/+/, '')
+  const base = BASE_PATH.replace(/^\/+|\/+$/g, '')
+  if (!base) return clean
+  if (clean === base) return ''
+  return clean.startsWith(`${base}/`) ? clean.slice(base.length + 1) : clean
 }
 
 export const buildCanonicalUrl = (routePath = '/') => {
   const route = normalizeRoutePath(routePath)
-  return new URL(route === '/' ? '' : route.replace(/^\//, ''), `${SITE_URL}/`).href
+  const relative = removeBasePrefix(route === '/' ? '' : route)
+  return new URL(relative, `${SITE_URL}/`).href
 }
 
 export const buildAssetUrl = (assetPath = '') => {
   if (/^https?:\/\//i.test(assetPath)) return assetPath
-  let cleanAsset = String(assetPath || '').split(/[?#]/)[0].replace(/^\/+/, '')
-  const cleanBase = BASE_PATH.replace(/^\/+|\/+$/g, '')
-  if (cleanBase && (cleanAsset === cleanBase || cleanAsset.startsWith(`${cleanBase}/`))) {
-    cleanAsset = cleanAsset.slice(cleanBase.length).replace(/^\/+/, '')
-  }
-  return new URL(cleanAsset, `${SITE_URL}/`).href
+  const [pathname, suffix = ''] = String(assetPath || '').split(/(?=[?#])/)
+  const cleanAsset = removeBasePrefix(pathname)
+  return `${new URL(cleanAsset, `${SITE_URL}/`).href}${suffix}`
 }
 
 export const robotsContent = (noIndex = false) =>
