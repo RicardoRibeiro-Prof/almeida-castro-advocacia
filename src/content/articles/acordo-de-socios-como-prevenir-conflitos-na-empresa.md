@@ -3,12 +3,17 @@ title: "Acordo de sócios: como organizar regras antes dos conflitos"
 slug: "acordo-de-socios-como-prevenir-conflitos-na-empresa"
 category: "Direito Empresarial"
 summary: "Entenda como um acordo de sócios pode organizar decisões, responsabilidades, entrada e saída de integrantes da empresa."
-cover: "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&q=86"
+excerpt: "Regras de decisão, responsabilidades e saída de integrantes que podem ser organizadas em um acordo de sócios."
+cover: "/images/articles/default.svg"
+coverAlt: "Ilustração institucional sobre acordo de sócios e organização empresarial"
 author: "Dr. Rafael Almeida"
 date: "2026-06-26T12:00:00.000Z"
+updatedAt: "2026-07-12T12:00:00.000Z"
+keywords: ["acordo de sócios", "sociedade empresarial", "direito empresarial"]
 readingTime: 5
 featured: false
 published: true
+noIndex: false
 ---
 Sociedades costumam começar com confiança e objetivos comuns. Ainda assim, a rotina empresarial pode apresentar divergências sobre investimentos, distribuição de resultados, responsabilidades e decisões estratégicas.
 
