@@ -1,7 +1,7 @@
 import { MessageCircle } from 'lucide-react'
 import { getWhatsAppUrl } from '../utils/constants'
 
-const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}images/team-rafael.jpg`
+const FALLBACK_IMAGE = `${import.meta.env.BASE_URL}images/team-rafael.svg`
 
 export default function TeamCard({ member, detailed = false }) {
   return (
@@ -10,8 +10,8 @@ export default function TeamCard({ member, detailed = false }) {
         <img
           src={member.image}
           alt={member.imageAlt || `Retrato profissional demonstrativo de ${member.name}`}
-          width="900"
-          height="1100"
+          width="480"
+          height="600"
           loading="lazy"
           decoding="async"
           onError={(event) => { event.currentTarget.src = FALLBACK_IMAGE }}
