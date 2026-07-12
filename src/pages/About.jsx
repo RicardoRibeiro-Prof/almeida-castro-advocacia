@@ -3,7 +3,7 @@ import PageHero from '../components/PageHero'
 import SectionHeading from '../components/SectionHeading'
 import Seo from '../components/Seo'
 
-const ABOUT_IMAGE = 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1500&q=88'
+const ABOUT_IMAGE = `${import.meta.env.BASE_URL}images/about-office.jpg`
 
 const timeline = [
   { year: '2018', title: 'Início da atuação', text: 'Formação de uma proposta de atendimento jurídico próximo, ético e organizado.' },
@@ -15,7 +15,11 @@ const timeline = [
 export default function About() {
   return (
     <>
-      <Seo title="O Escritório" description="Conheça a história, os valores e a forma de atendimento da Almeida & Castro Advocacia em São Raimundo Nonato." />
+      <Seo
+        title="Sobre o Escritório | Almeida & Castro Advocacia"
+        description="Conheça a proposta institucional, os valores e a forma de atendimento da Almeida & Castro Advocacia em São Raimundo Nonato."
+        path="/sobre"
+      />
       <PageHero
         eyebrow="Institucional"
         title="O Escritório"
@@ -31,7 +35,9 @@ export default function About() {
             <p>Cada atendimento começa com a compreensão dos fatos e a conferência dos documentos relevantes. As possibilidades são explicadas de maneira responsável, considerando riscos, procedimentos e particularidades da situação apresentada.</p>
             <p>O compromisso institucional é manter uma atuação ética, discreta e tecnicamente cuidadosa, com comunicação clara durante todas as etapas do trabalho.</p>
           </div>
-          <div className="image-frame image-frame--tall image-frame--premium"><img src={ABOUT_IMAGE} alt="Ambiente profissional de atendimento" /></div>
+          <div className="image-frame image-frame--tall image-frame--premium">
+            <img src={ABOUT_IMAGE} alt="Ambiente profissional demonstrativo de atendimento" width="1500" height="1000" loading="lazy" decoding="async" />
+          </div>
         </div>
       </section>
 
@@ -39,16 +45,16 @@ export default function About() {
         <div className="container">
           <SectionHeading eyebrow="Direcionamento" title="Missão, visão e valores" align="center" />
           <div className="mission-grid">
-            <article><span><Compass /></span><h3>Missão</h3><p>Prestar orientação jurídica responsável, com atendimento próximo, linguagem clara e respeito às normas profissionais.</p></article>
-            <article><span><Eye /></span><h3>Visão</h3><p>Consolidar uma presença jurídica reconhecida pela organização, confiança institucional e qualidade da comunicação.</p></article>
-            <article><span><HeartHandshake /></span><h3>Valores</h3><p>Ética, respeito, discrição, clareza, responsabilidade, atualização e atenção às particularidades de cada demanda.</p></article>
+            <article><span><Compass aria-hidden="true" /></span><h2>Missão</h2><p>Prestar orientação jurídica responsável, com atendimento próximo, linguagem clara e respeito às normas profissionais.</p></article>
+            <article><span><Eye aria-hidden="true" /></span><h2>Visão</h2><p>Consolidar uma presença jurídica reconhecida pela organização, confiança institucional e qualidade da comunicação.</p></article>
+            <article><span><HeartHandshake aria-hidden="true" /></span><h2>Valores</h2><p>Ética, respeito, discrição, clareza, responsabilidade, atualização e atenção às particularidades de cada demanda.</p></article>
           </div>
         </div>
       </section>
 
       <section className="section">
         <div className="container service-method-grid">
-          <div className="service-method-card"><Scale size={42} /><span className="eyebrow">Forma de atendimento</span><h2>Um processo simples, claro e organizado</h2><p>O primeiro contato tem finalidade informativa e de organização. A orientação jurídica depende da compreensão dos fatos e da análise dos documentos relevantes.</p></div>
+          <div className="service-method-card"><Scale size={42} aria-hidden="true" /><span className="eyebrow">Forma de atendimento</span><h2>Um processo simples, claro e organizado</h2><p>O primeiro contato tem finalidade informativa e de organização. A orientação jurídica depende da compreensão dos fatos e da análise dos documentos relevantes.</p></div>
           <ol className="service-steps">
             <li><span>01</span><div><h3>Contato inicial</h3><p>Identificação do tema e orientação sobre agendamento e documentos.</p></div></li>
             <li><span>02</span><div><h3>Escuta e análise</h3><p>Compreensão dos fatos e conferência das informações apresentadas.</p></div></li>
@@ -64,7 +70,7 @@ export default function About() {
           <div className="timeline">
             {timeline.map((item) => <article key={item.year}><span>{item.year}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></article>)}
           </div>
-          <p className="demo-note"><Check size={17} /> Atendimento pautado por ética, responsabilidade e respeito às normas profissionais.</p>
+          <p className="demo-note"><Check size={17} aria-hidden="true" /> Atendimento pautado por ética, responsabilidade e respeito às normas profissionais.</p>
         </div>
       </section>
     </>
