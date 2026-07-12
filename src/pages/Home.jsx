@@ -23,8 +23,8 @@ import { teamMembers } from '../data/team'
 import { getRecentPublishedArticles } from '../services/articleService'
 import { getWhatsAppUrl } from '../utils/constants'
 
-const HERO_IMAGE = 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1800&q=88'
-const ABOUT_IMAGE = 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1500&q=88'
+const HERO_IMAGE = `${import.meta.env.BASE_URL}images/hero-office.jpg`
+const ABOUT_IMAGE = `${import.meta.env.BASE_URL}images/about-office.jpg`
 
 const differences = [
   'Atendimento personalizado e respeitoso',
@@ -55,8 +55,11 @@ export default function Home() {
   return (
     <>
       <Seo
-        title="Advocacia em São Raimundo Nonato"
-        description="Almeida & Castro Advocacia: atendimento jurídico institucional, ético e próximo em São Raimundo Nonato, Piauí."
+        title="Almeida & Castro Advocacia em São Raimundo Nonato – PI"
+        description="Escritório demonstrativo com atendimento jurídico institucional, ético e informativo em São Raimundo Nonato, Piauí."
+        path="/"
+        image="/images/social-share.svg"
+        imageAlt="Identidade visual da Almeida & Castro Advocacia"
       />
 
       <section className="hero hero--premium">
@@ -70,22 +73,29 @@ export default function Home() {
             </p>
             <div className="hero__actions">
               <Link className="button button--gold" to="/areas-de-atuacao">
-                Conheça nossas áreas <ArrowRight size={18} />
+                Conheça nossas áreas <ArrowRight size={18} aria-hidden="true" />
               </Link>
               <a className="button button--light-outline" href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
-                <MessageCircle size={18} /> Fale pelo WhatsApp
+                <MessageCircle size={18} aria-hidden="true" /> Fale pelo WhatsApp
               </a>
             </div>
             <div className="hero__trust">
-              <ShieldCheck size={22} />
+              <ShieldCheck size={22} aria-hidden="true" />
               <span>Atendimento orientado por ética, discrição, clareza e responsabilidade profissional.</span>
             </div>
           </div>
 
           <div className="hero__visual hero__visual--photo">
-            <img src={HERO_IMAGE} alt="Escritório moderno e acolhedor" />
+            <img
+              src={HERO_IMAGE}
+              alt="Escritório demonstrativo moderno e acolhedor"
+              width="1600"
+              height="1000"
+              decoding="async"
+              fetchPriority="high"
+            />
             <div className="hero__visual-card">
-              <Quote size={22} />
+              <Quote size={22} aria-hidden="true" />
               <p>Informação clara para decisões jurídicas mais conscientes.</p>
             </div>
           </div>
@@ -96,7 +106,7 @@ export default function Home() {
         <div className="container institutional-strip__grid">
           {highlights.map(({ icon: Icon, title, text }) => (
             <article key={title}>
-              <span><Icon size={23} /></span>
+              <span><Icon size={23} aria-hidden="true" /></span>
               <div><strong>{title}</strong><small>{text}</small></div>
             </article>
           ))}
@@ -106,7 +116,14 @@ export default function Home() {
       <section className="section about-preview">
         <div className="container split-layout">
           <div className="image-frame image-frame--office image-frame--premium">
-            <img src={ABOUT_IMAGE} alt="Sala de reunião contemporânea" loading="lazy" />
+            <img
+              src={ABOUT_IMAGE}
+              alt="Sala de reunião contemporânea do projeto demonstrativo"
+              width="1500"
+              height="1000"
+              loading="lazy"
+              decoding="async"
+            />
             <span className="image-frame__detail">Atendimento presencial e digital</span>
           </div>
           <div>
@@ -123,10 +140,10 @@ export default function Home() {
             </p>
             <div className="value-mini-grid">
               {institutionalValues.slice(0, 2).map(({ title, description, icon: Icon }) => (
-                <div key={title}><Icon size={22} /><div><strong>{title}</strong><span>{description}</span></div></div>
+                <div key={title}><Icon size={22} aria-hidden="true" /><div><strong>{title}</strong><span>{description}</span></div></div>
               ))}
             </div>
-            <Link className="button button--primary" to="/sobre">Conheça o escritório <ArrowRight size={18} /></Link>
+            <Link className="button button--primary" to="/sobre">Conheça o escritório <ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
         </div>
       </section>
@@ -142,7 +159,7 @@ export default function Home() {
           <div className="area-grid">
             {practiceAreas.map((area) => <AreaCard key={area.slug} area={area} />)}
           </div>
-          <div className="center-action"><Link className="button button--outline" to="/areas-de-atuacao">Ver todas as áreas <ArrowRight size={18} /></Link></div>
+          <div className="center-action"><Link className="button button--outline" to="/areas-de-atuacao">Ver todas as áreas <ArrowRight size={18} aria-hidden="true" /></Link></div>
         </div>
       </section>
 
@@ -155,15 +172,15 @@ export default function Home() {
               description="O atendimento jurídico deve ser compreensível, organizado e adequado à realidade de quem busca orientação."
             />
             <ul className="check-list">
-              {differences.map((item) => <li key={item}><CheckCircle2 size={20} /> {item}</li>)}
+              {differences.map((item) => <li key={item}><CheckCircle2 size={20} aria-hidden="true" /> {item}</li>)}
             </ul>
           </div>
           <div className="principles-card principles-card--premium">
-            <Scale size={34} />
+            <Scale size={34} aria-hidden="true" />
             <span className="principles-card__number">05</span>
-            <h3>Princípios do atendimento</h3>
+            <h2>Princípios do atendimento</h2>
             <p>Escutar, analisar, explicar, orientar e acompanhar. Uma sequência que mantém o atendimento claro, responsável e transparente.</p>
-            <Link className="text-link text-link--light" to="/contato">Solicitar informações <ArrowRight size={17} /></Link>
+            <Link className="text-link text-link--light" to="/contato">Solicitar informações <ArrowRight size={17} aria-hidden="true" /></Link>
           </div>
         </div>
       </section>
@@ -173,13 +190,13 @@ export default function Home() {
           <SectionHeading
             eyebrow="Equipe"
             title="Experiência, escuta e atuação integrada"
-            description="Conheça os profissionais responsáveis pelo atendimento e as principais áreas de atuação do escritório."
+            description="Conheça os profissionais demonstrativos responsáveis pelo atendimento e as principais áreas de atuação do escritório."
             align="center"
           />
           <div className="team-grid team-grid--home">
             {teamMembers.map((member) => <TeamCard key={member.name} member={member} />)}
           </div>
-          <div className="center-action"><Link className="button button--outline" to="/equipe">Conheça a equipe <ArrowRight size={18} /></Link></div>
+          <div className="center-action"><Link className="button button--outline" to="/equipe">Conheça a equipe <ArrowRight size={18} aria-hidden="true" /></Link></div>
         </div>
       </section>
 
@@ -194,13 +211,13 @@ export default function Home() {
           {loading ? (
             <LoadingSpinner label="Carregando artigos..." />
           ) : error ? (
-            <p className="status-message status-message--error">{error}</p>
+            <p className="status-message status-message--error" role="alert">{error}</p>
           ) : (
             <div className="article-grid">
               {articles.map((article) => <ArticleCard key={article.id} article={article} />)}
             </div>
           )}
-          <div className="center-action"><Link className="button button--primary" to="/artigos">Ver todos os artigos <ArrowRight size={18} /></Link></div>
+          <div className="center-action"><Link className="button button--primary" to="/artigos">Ver todos os artigos <ArrowRight size={18} aria-hidden="true" /></Link></div>
         </div>
       </section>
 
@@ -209,7 +226,7 @@ export default function Home() {
       <section className="cta-section cta-section--premium">
         <div className="container cta-section__inner">
           <div><span className="eyebrow eyebrow--light">Contato institucional</span><h2>Precisa de orientação sobre uma questão jurídica?</h2><p>Envie uma mensagem com uma breve descrição do tema para receber informações sobre o atendimento.</p></div>
-          <a className="button button--gold" href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} /> Entrar em contato</a>
+          <a className="button button--gold" href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer"><MessageCircle size={18} aria-hidden="true" /> Entrar em contato</a>
         </div>
       </section>
     </>
