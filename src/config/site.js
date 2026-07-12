@@ -77,7 +77,11 @@ export const buildCanonicalUrl = (routePath = '/') => {
 
 export const buildAssetUrl = (assetPath = '') => {
   if (/^https?:\/\//i.test(assetPath)) return assetPath
-  const cleanAsset = String(assetPath || '').replace(/^\/+/, '')
+  let cleanAsset = String(assetPath || '').split(/[?#]/)[0].replace(/^\/+/, '')
+  const cleanBase = BASE_PATH.replace(/^\/+|\/+$/g, '')
+  if (cleanBase && (cleanAsset === cleanBase || cleanAsset.startsWith(`${cleanBase}/`))) {
+    cleanAsset = cleanAsset.slice(cleanBase.length).replace(/^\/+/, '')
+  }
   return new URL(cleanAsset, `${SITE_URL}/`).href
 }
 
