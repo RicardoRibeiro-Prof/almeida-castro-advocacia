@@ -7,7 +7,11 @@ import { practiceAreas } from '../data/practiceAreas'
 export default function PracticeAreas() {
   return (
     <>
-      <Seo title="Áreas de Atuação" description="Conheça as áreas de atuação da Almeida & Castro Advocacia: Direito Civil, Previdenciário, Trabalhista, de Família, do Consumidor e Empresarial." />
+      <Seo
+        title="Áreas de Atuação | Almeida & Castro Advocacia"
+        description="Conheça as áreas jurídicas atendidas pela Almeida & Castro Advocacia, com orientação informativa e responsável."
+        path="/areas-de-atuacao"
+      />
       <PageHero
         eyebrow="Atuação jurídica"
         title="Áreas de Atuação"
