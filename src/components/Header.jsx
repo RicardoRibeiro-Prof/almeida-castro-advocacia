@@ -71,7 +71,7 @@ export default function Header() {
               >
                 Áreas de Atuação <ChevronDown size={15} aria-hidden="true" />
               </button>
-              <div id="practice-areas-menu" className="nav-dropdown__menu" hidden={!areasOpen}>
+              <div id="practice-areas-menu" className="nav-dropdown__menu">
                 <Link className="nav-dropdown__all" to="/areas-de-atuacao">Ver todas as áreas</Link>
                 {practiceAreas.map((area) => (
                   <Link key={area.slug} to={`/areas-de-atuacao/${area.slug}`}>
